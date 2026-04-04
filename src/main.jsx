@@ -155,7 +155,7 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
 
   const navLinks = [
     { name: 'Home', id: 'home' },
-    { name: 'Catalogue', id: 'projects' },
+    { name: 'Catalog', id: 'projects' },
     { name: 'Agency', id: 'studio' },
     { name: 'Contact', id: 'contact' },
   ];
@@ -244,7 +244,7 @@ const HomePage = ({ setCurrentPage }) => (
               onClick={() => setCurrentPage('projects')}
               className="w-full sm:w-auto bg-zinc-900 text-white px-8 py-3.5 uppercase tracking-widest text-[9px] font-bold hover:bg-zinc-800 transition-all flex items-center justify-center gap-3 rounded-lg"
             >
-              View Catalogue <ArrowRight size={12} />
+              View Catalog <ArrowRight size={12} />
             </button>
             <button 
               onClick={() => setCurrentPage('studio')}
@@ -265,10 +265,10 @@ const HomePage = ({ setCurrentPage }) => (
       </Reveal>
       <Reveal delay={0.3}>
         <p className="text-zinc-500 text-sm md:text-base leading-relaxed font-light mb-6">
-          With the rapid growth of the tech sector in Research Triangle Park and the financial expansion in Charlotte, North Carolina has become the primary intersection between suburban comfort and global career opportunities. At Velmor, we understand this demographic shift.
+          With rapid growth in the tech sector at Research Triangle Park and financial expansion in Charlotte, North Carolina has become the premier meeting point between suburban comfort and global career opportunities. At Velmor, we understand this demographic shift.
         </p>
         <p className="text-zinc-500 text-sm md:text-base leading-relaxed font-light">
-          The year 2026 marks the era of The Great Balance, where a home is no longer just a place to live, but an energy hub, an integrated private office, and a regenerative space. We curate every property with standards of sustainable technology and timeless aesthetics.
+          The year 2026 marks the era of the Great Balance, where a home is no longer just a place to live, but a hub of energy and a regenerative space. We curate every property with sustainable technology standards.
         </p>
       </Reveal>
     </section>
@@ -287,7 +287,7 @@ const ProjectsPage = () => {
             <Reveal delay={0.3}><h1 className="text-3xl md:text-4xl font-serif text-zinc-900">2026 Property Curation</h1></Reveal>
           </div>
           <div className="flex items-center gap-2 text-zinc-400 text-[10px] uppercase tracking-wider">
-            <Calendar size={14} /> Last updated: March 2026
+            <Calendar size={14} /> Last Updated: March 2026
           </div>
         </div>
 
@@ -309,7 +309,7 @@ const ProjectsPage = () => {
                   className="w-full h-full object-cover transition-all"
                 />
                 <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 text-[9px] font-bold tracking-widest uppercase shadow-sm rounded-lg">
-                  Starting {p.price}
+                  Starting from {p.price}
                 </div>
               </div>
               <div className="flex justify-between items-start px-1">
@@ -350,11 +350,11 @@ const StudioPage = () => (
         
         <div className="max-w-xl">
           <Reveal><span className="text-blue-600 uppercase tracking-widest text-[9px] font-bold mb-3 block">Agency Profile</span></Reveal>
-          <Reveal delay={0.2}><h1 className="text-3xl md:text-4xl font-serif text-zinc-900 mb-6 leading-tight">Velmor Agency: <br/> Navigating the NC Property Market.</h1></Reveal>
+          <Reveal delay={0.2}><h1 className="text-3xl md:text-4xl font-serif text-zinc-900 mb-6 leading-tight">Velmor Agency: <br/> Navigating the NC Market.</h1></Reveal>
           <div className="space-y-4 text-zinc-600 text-sm md:text-base font-light leading-relaxed">
-            <p>Since 2020, Velmor has transformed from a local property boutique into a leading consulting agency in North Carolina. We focus on properties that combine visual luxury with technical functionality.</p>
-            <p>Our team consists of real estate market experts, sustainability data analysts, and interior curators dedicated to providing a turn key experience for every client.</p>
-            <p>In this year of 2026, we are proud to have helped over 500 families find the place they call the Home of the Future.</p>
+            <p>Since 2020, Velmor has transformed from a local boutique real estate firm into a leading consultancy agency in North Carolina. We focus on properties that blend visual luxury with technical functionality.</p>
+            <p>Our team consists of real estate market experts and interior curators dedicated to providing the best experience for every client.</p>
+            <p>In 2026, we are proud to have helped over 500 families find the place they call the Home of the Future.</p>
           </div>
           
           <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-zinc-200">
@@ -387,7 +387,7 @@ const ContactPage = () => (
             <div className="flex gap-4 items-start">
               <div className="p-2 bg-zinc-50 rounded-lg"><Phone className="text-zinc-400" size={16} /></div>
               <div>
-                <h4 className="text-[8px] uppercase tracking-widest text-zinc-400 font-black mb-1">WhatsApp Office</h4>
+                <h4 className="text-[8px] uppercase tracking-widest text-zinc-400 font-black mb-1">Office WhatsApp</h4>
                 <p className="text-lg text-zinc-900">+1 (704) 563-4532</p>
               </div>
             </div>
@@ -410,16 +410,16 @@ const ContactPage = () => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-[7px] uppercase font-black text-zinc-500 tracking-widest">Full Name</label>
-                <input type="text" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm" placeholder="John Doe" />
+                <input type="text" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm" placeholder="Your Name" />
               </div>
               <div className="space-y-2">
                 <label className="text-[7px] uppercase font-black text-zinc-500 tracking-widest">Email Address</label>
-                <input type="email" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm" placeholder="john@example.com" />
+                <input type="email" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm" placeholder="email@example.com" />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-[7px] uppercase font-black text-zinc-500 tracking-widest">Message / Specific Interests</label>
-              <textarea rows="3" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm resize-none" placeholder="Tell us about the property type you are looking for..."></textarea>
+              <label className="text-[7px] uppercase font-black text-zinc-500 tracking-widest">Message / Specific Interest</label>
+              <textarea rows="3" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm resize-none" placeholder="Tell us what kind of property you are looking for..."></textarea>
             </div>
             <button className="w-full flex items-center justify-center bg-white text-zinc-900 px-6 py-3.5 font-bold uppercase tracking-widest text-[9px] hover:bg-zinc-200 transition-colors gap-3 rounded-lg">
               Send Consultation Schedule <ArrowRight size={12} />
@@ -436,10 +436,10 @@ const Footer = () => (
     <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
       <div className="text-center md:text-left">
         <span className="text-lg font-serif tracking-tighter text-zinc-900 italic">Velmor Agency.</span>
-        <p className="text-[8px] text-zinc-400 tracking-widest uppercase mt-1">North Carolina Premier Real Estate</p>
+        <p className="text-[8px] text-zinc-400 tracking-widest uppercase mt-1">Premium North Carolina Properties</p>
       </div>
       <div className="text-zinc-300 text-[10px] tracking-widest uppercase font-medium">
-        © 2026 Velmor Agency - Member of NC Realtor Association
+        © 2026 Velmor Agency - NC Broker Association Member
       </div>
     </div>
   </footer>
@@ -453,22 +453,24 @@ export default function App() {
     script.src = "https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js";
     script.async = true;
     script.onload = () => {
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-      });
+      if (window.Lenis) {
+        const lenis = new window.Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: 'vertical',
+          gestureOrientation: 'vertical',
+          smoothWheel: true,
+          wheelMultiplier: 1,
+          smoothTouch: false,
+          touchMultiplier: 2,
+        });
 
-      function raf(time) {
-        lenis.raf(time);
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
         requestAnimationFrame(raf);
       }
-      requestAnimationFrame(raf);
     };
     document.head.appendChild(script);
 
