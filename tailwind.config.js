@@ -1,10 +1,10 @@
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+module.exports = {
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        display: ['Playfair Display', 'serif'],
+        sans: ['Inter', 'sans-serif'],
+      },
+    },
   },
-  plugins: [],
 }
