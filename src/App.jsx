@@ -181,7 +181,7 @@ const Navbar = ({ currentPage, setCurrentPage, setShowInquiry }) => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.1 }}
                   onClick={() => handleNavClick(item.id)}
-                  className={`text-4xl font-display italic serif ${currentPage === item.id ? 'text-emerald-400' : 'text-white'}`}
+                  className={`text-4xl font-display italic ${currentPage === item.id ? 'text-emerald-400' : 'text-white'}`}
                 >
                   {item.label}
                 </motion.button>
@@ -289,7 +289,7 @@ const InquiryModal = ({ isOpen, onClose }) => (
             <X size={24} />
           </button>
 
-          <h3 className="text-3xl font-display italic serif text-emerald-950 mb-2">Service Inquiry</h3>
+          <h3 className="text-3xl font-display italic text-emerald-950 mb-2">Service Inquiry</h3>
           <p className="text-zinc-500 text-sm mb-8 italic">Get our exclusive brochure and professional property assessment.</p>
           
           <div className="space-y-4">
@@ -388,7 +388,7 @@ const ProjectsPage = ({ onSelectProperty }) => {
         <header className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
             <span className="text-emerald-700 text-[10px] font-bold uppercase tracking-widest block mb-4 italic">Available Listings</span>
-            <h2 className="text-5xl font-display italic serif text-emerald-950 leading-tight">Masterpieces of <br/>Architecture.</h2>
+            <h2 className="text-5xl font-display italic text-emerald-950 leading-tight">Masterpieces of <br/>Architecture.</h2>
           </div>
           
           <div className="flex flex-wrap gap-3 p-1.5 bg-zinc-200/50 rounded-2xl backdrop-blur-sm border border-zinc-300/30">
@@ -434,7 +434,7 @@ const ProjectsPage = ({ onSelectProperty }) => {
                   </div>
                   <h3 className="text-2xl font-display text-emerald-950 mb-6 group-hover:text-emerald-700 transition-colors flex-grow italic serif">{p.title}</h3>
                   <div className="flex justify-between items-center pt-6 border-t border-zinc-50">
-                    <span className="text-emerald-900 font-bold italic serif text-xl">{p.price}</span>
+                    <span className="text-emerald-900 font-bold italic text-xl">{p.price}</span>
                     <div className="w-12 h-12 rounded-full bg-zinc-50 flex items-center justify-center text-zinc-400 group-hover:bg-emerald-950 group-hover:text-white transition-all shadow-sm group-hover:rotate-45 duration-500">
                       <ArrowUpRight size={18} />
                     </div>
@@ -462,7 +462,7 @@ const AgencyPage = () => {
           >
             <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1200" className="w-full aspect-[4/5] object-cover rounded-[3rem] shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]" alt="Agency" />
             <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-emerald-600 rounded-[2.5rem] flex items-center justify-center p-8 text-white hidden md:flex shadow-2xl border-8 border-white hover:rotate-6 transition-transform duration-500">
-              <p className="text-xl font-display font-bold italic serif leading-tight">Driven by Design & Discipline.</p>
+              <p className="text-xl font-display font-bold italic leading-tight">Driven by Design & Discipline.</p>
             </div>
           </motion.div>
           <div className="space-y-10">
@@ -472,7 +472,7 @@ const AgencyPage = () => {
               viewport={{ once: true }}
             >
               <span className="text-emerald-600 text-[10px] font-bold uppercase tracking-widest mb-4 block italic">Our Philosophy</span>
-              <h2 className="text-5xl md:text-6xl font-display italic serif text-emerald-950 mb-8 leading-tight">Defining Standards for Elite NC Properties.</h2>
+              <h2 className="text-5xl md:text-6xl font-display italic text-emerald-950 mb-8 leading-tight">Defining Standards for Elite NC Properties.</h2>
               <p className="text-lg text-zinc-500 font-light leading-relaxed italic">
                 "We represent a standard of living where every detail matters. Velmor exists to connect visionary individuals with extraordinary spaces."
               </p>
@@ -485,7 +485,7 @@ const AgencyPage = () => {
                 >
                   <div className="text-emerald-600"><Layers size={24}/></div>
                   <div>
-                    <h4 className="font-bold text-emerald-950 mb-1 italic serif">Seamless Transactions</h4>
+                    <h4 className="font-bold text-emerald-950 mb-1 italic">Seamless Transactions</h4>
                     <p className="text-sm text-zinc-500 font-light">White-glove service covering legal, structural, and financial aspects of your acquisition.</p>
                   </div>
                </motion.div>
@@ -495,7 +495,7 @@ const AgencyPage = () => {
                 >
                   <div className="text-emerald-600"><Sparkles size={24}/></div>
                   <div>
-                    <h4 className="font-bold text-emerald-950 mb-1 italic serif">Sustainable Luxury</h4>
+                    <h4 className="font-bold text-emerald-950 mb-1 italic">Sustainable Luxury</h4>
                     <p className="text-sm text-zinc-500 font-light">Prioritizing eco-conscious designs that don't compromise on comfort or grandeur.</p>
                   </div>
                </motion.div>
@@ -503,15 +503,15 @@ const AgencyPage = () => {
 
             <div className="grid grid-cols-3 gap-6 pt-10 border-t border-zinc-100">
               <div>
-                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic serif">850+</h4>
+                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic">850+</h4>
                 <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">Successful Closings</p>
               </div>
               <div>
-                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic serif">15+</h4>
+                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic">15+</h4>
                 <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">Design Awards</p>
               </div>
               <div>
-                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic serif">Top 1%</h4>
+                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic">Top 1%</h4>
                 <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">Agency Ranking</p>
               </div>
             </div>
@@ -527,7 +527,7 @@ const ContactPage = () => (
     <div className="max-w-6xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
         <div className="text-white space-y-12">
-          <h2 className="text-5xl md:text-7xl font-display italic serif leading-none">Your journey starts <span className="text-emerald-400">here.</span></h2>
+          <h2 className="text-5xl md:text-7xl font-display italic leading-none">Your journey starts <span className="text-emerald-400">here.</span></h2>
           <div className="space-y-8 pt-6">
             <div className="flex gap-6 items-start group">
               <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-emerald-400 border border-white/10 shadow-lg group-hover:bg-emerald-400 group-hover:text-emerald-950 transition-all duration-500"><Phone size={22}/></div>
@@ -554,7 +554,7 @@ const ContactPage = () => (
         </div>
 
         <div className="bg-white p-10 md:p-16 rounded-[4rem] shadow-2xl self-center">
-          <h3 className="text-3xl font-display italic serif text-emerald-950 mb-10">Private Inquiry</h3>
+          <h3 className="text-3xl font-display italic text-emerald-950 mb-10">Private Inquiry</h3>
           <form className="space-y-8" onSubmit={e => e.preventDefault()}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
