@@ -1,154 +1,383 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  X, 
-  ArrowUpRight,
-  ArrowRight
+  ArrowUpRight, 
+  MapPin, 
+  Phone, 
+  Mail, 
+  Globe,
+  LayoutGrid,
+  Home,
+  Building2,
+  TreePine,
+  CheckCircle2,
+  ChevronRight,
+  X,
+  Maximize2,
+  Layers,
+  Sparkles
 } from 'lucide-react';
 
-const IMAGES = {
-  hero: "https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  project1: "https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800",
-  project2: "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=800",
-  project3: "https://images.pexels.com/photos/277667/pexels-photo-277667.jpeg?auto=compress&cs=tinysrgb&w=800",
-  project4: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
-  commercial1: "https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800",
-  commercial2: "https://images.pexels.com/photos/37347/office-sitting-room-executive-sitting.jpg?auto=compress&cs=tinysrgb&w=800",
-  land1: "https://images.pexels.com/photos/46160/field-clouds-sky-earth-46160.jpeg?auto=compress&cs=tinysrgb&w=800",
-  land2: "https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800",
-  agency: "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1200"
-};
-
 const PROPERTY_DATA = [
-  { id: 1, category: 'Residential', title: "Charlotte Zenith Villa", price: "$2,450,000", img: IMAGES.project1, location: "Charlotte, NC", fullDesc: "A contemporary masterpiece in Myers Park featuring 20-foot ceilings and private vertical gardens." },
-  { id: 2, category: 'Residential', title: "Raleigh Glass Estate", price: "$1,890,000", img: IMAGES.project2, location: "Raleigh, NC", fullDesc: "Industrial aesthetics with continuous glass walls that merge seamlessly with the Research Triangle nature." },
-  { id: 3, category: 'Commercial', title: "Triangle Tech Hub", price: "$12,500,000", img: IMAGES.commercial1, location: "Durham, NC", fullDesc: "Grade A LEED Platinum complex featuring rooftop lounges and cutting-edge technology facilities." },
-  { id: 4, category: 'Commercial', title: "The Meridian Office", price: "$8,200,000", img: IMAGES.commercial2, location: "Charlotte, NC", fullDesc: "Modular office spaces in the prime business district with 360-degree city skyline views." },
-  { id: 5, category: 'Land', title: "Blue Ridge Sanctuary", price: "$3,100,000", img: IMAGES.land1, location: "Asheville, NC", fullDesc: "25 acres of exclusive mountain slope land, ideal for luxury resorts or private estates." },
-  { id: 6, category: 'Land', title: "Coastal Horizon Lot", price: "$2,720,000", img: IMAGES.land2, location: "Wilmington, NC", fullDesc: "Prime beachfront lot in Wrightsville Beach with permits for an exclusive waterfront residential development." }
+  { 
+    id: 1, 
+    category: 'Residential', 
+    title: "The Zenith Canopy", 
+    price: "$2,450,000", 
+    img: "https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800", 
+    location: "Charlotte, NC", 
+    fullDesc: "Located at the peak of Myers Park, The Zenith Canopy is an architectural achievement that combines exposed concrete with warm walnut panels. It features a sophisticated natural ventilation system.",
+    features: ["4 Bedrooms", "Infinity Pool", "Smart Glass"]
+  },
+  { 
+    id: 2, 
+    category: 'Residential', 
+    title: "Obsidian Glass House", 
+    price: "$1,890,000", 
+    img: "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=800", 
+    location: "Raleigh, NC", 
+    fullDesc: "The Obsidian Glass House offers uncompromising privacy through thin gold-layered one-way glass that reflects the landscape while maintaining interior luminosity.",
+    features: ["Minimalist Design", "Solar Power", "Private Gallery"]
+  },
+  { 
+    id: 3, 
+    category: 'Commercial', 
+    title: "The Monolith Center", 
+    price: "$12,500,000", 
+    img: "https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800", 
+    location: "Durham, NC", 
+    fullDesc: "As the center of business gravity in Durham, The Monolith Center redefines the post-2025 workspace with AI integration on every floor.",
+    features: ["Tech Hub", "Co-working Spaces", "Zero Carbon Emission"]
+  },
+  { 
+    id: 4, 
+    category: 'Land', 
+    title: "Blue Ridge Sanctuary", 
+    price: "$3,100,000", 
+    img: "https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&w=1200", 
+    location: "Asheville, NC", 
+    fullDesc: "20 acres of pristine land on the slopes of the Blue Ridge Mountains. Untouched terrain offering native vegetation and private spring water sources.",
+    features: ["360 Mountain Views", "Private Spring", "Development Permit"]
+  },
+  { 
+    id: 5, 
+    category: 'Land', 
+    title: "Outer Banks Horizon", 
+    price: "$1,450,000", 
+    img: "https://images.pexels.com/photos/1035010/pexels-photo-1035010.jpeg?auto=compress&cs=tinysrgb&w=1200", 
+    location: "Wilmington, NC", 
+    fullDesc: "Exclusive vacant lot directly facing the Atlantic Ocean. No structures obstructing the view, ideal for a luxury residential home.",
+    features: ["Direct Beachfront", "Flat Topography", "Private Dock Access"]
+  },
+  { 
+    id: 6, 
+    category: 'Commercial', 
+    title: "Vortex Tech Plaza", 
+    price: "$8,200,000", 
+    img: "https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=800", 
+    location: "Cary, NC", 
+    fullDesc: "A futuristic office complex in the heart of the Research Triangle. Specifically designed for high-level technology companies.",
+    features: ["Research Lab", "Event Hall", "Heliport"]
+  }
 ];
 
-const LoadingScreen = ({ onComplete }) => {
-  useEffect(() => {
-    const timer = setTimeout(onComplete, 1200);
-    return () => clearTimeout(timer);
-  }, [onComplete]);
-
-  return (
-    <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-zinc-950 flex items-center justify-center">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white font-display text-3xl tracking-tighter font-light italic serif">
-        Velmor<span className="text-blue-500 not-italic">.</span>
-      </motion.div>
-    </motion.div>
-  );
-};
-
-const Navbar = ({ currentPage, setCurrentPage }) => {
+const Navbar = ({ currentPage, setCurrentPage, setShowInquiry }) => {
   const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 30);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const menuItems = [
+    { id: 'home', label: 'Home' },
+    { id: 'projects', label: 'Properties' },
+    { id: 'agency', label: 'Agency' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'py-3 bg-white/95 backdrop-blur-md border-b border-zinc-100' : 'py-6 md:py-8 bg-transparent'}`}>
-      <div className="max-w-6xl mx-auto px-6 md:px-10 flex justify-between items-center">
-        <button onClick={() => setCurrentPage('home')} className="text-xl md:text-2xl font-display font-medium tracking-tighter text-zinc-950 italic serif group">
-          Velmor<span className="text-blue-500 not-italic group-hover:ml-1 transition-all">.</span>
+    <div className="fixed top-6 left-0 w-full z-[100] px-6 flex justify-center pointer-events-none">
+      <motion.nav 
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className={`pointer-events-auto flex items-center justify-between gap-8 px-8 py-3.5 rounded-full transition-all duration-700 border ${
+          isScrolled 
+          ? 'bg-white/80 backdrop-blur-xl border-zinc-200/50 shadow-2xl w-full max-w-4xl' 
+          : 'bg-emerald-950/20 backdrop-blur-sm border-white/10 w-full max-w-6xl'
+        }`}
+      >
+        <button onClick={() => setCurrentPage('home')} className={`text-xl font-display font-medium italic serif transition-colors ${isScrolled ? 'text-emerald-950' : 'text-white'}`}>
+          Velmor<span className="text-emerald-500 not-italic">.</span>
         </button>
-        <div className="flex gap-6 md:gap-10">
-          {['home', 'projects', 'studio', 'contact'].map((id) => (
-            <button key={id} onClick={() => setCurrentPage(id)} className={`text-[9px] md:text-[10px] uppercase tracking-[0.25em] font-semibold transition-all relative group ${currentPage === id ? 'text-blue-600' : 'text-zinc-400 hover:text-zinc-950'}`}>
-              {id === 'projects' ? 'Catalog' : id === 'studio' ? 'Agency' : id}
-              <motion.span className={`absolute -bottom-1 left-0 h-[1.5px] bg-blue-600 ${currentPage === id ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+
+        <div className="hidden md:flex items-center gap-8">
+          {menuItems.map((item) => (
+            <button 
+              key={item.id} 
+              onClick={() => setCurrentPage(item.id)} 
+              className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-all relative group ${
+                isScrolled 
+                ? (currentPage === item.id ? 'text-emerald-700' : 'text-zinc-400 hover:text-emerald-950') 
+                : (currentPage === item.id ? 'text-emerald-300' : 'text-white/60 hover:text-white')
+              }`}
+            >
+              {item.label}
+              <span className={`absolute -bottom-1 left-0 h-[1.5px] bg-emerald-500 transition-all duration-500 ${currentPage === item.id ? 'w-full' : 'w-0 group-hover:w-full'}`} />
             </button>
           ))}
         </div>
-      </div>
-    </nav>
+
+        <button 
+          onClick={() => setShowInquiry(true)}
+          className={`px-6 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all active:scale-95 ${
+          isScrolled 
+          ? 'bg-emerald-900 text-white hover:bg-emerald-700' 
+          : 'bg-white text-emerald-950 hover:bg-emerald-50 shadow-lg'
+        }`}>
+          Services
+        </button>
+      </motion.nav>
+    </div>
   );
 };
 
-const HomePage = ({ setCurrentPage }) => (
-  <div className="relative">
-    <section className="h-[90vh] md:h-screen relative flex items-center justify-center overflow-hidden">
-      <motion.div initial={{ scale: 1.1 }} animate={{ scale: 1 }} transition={{ duration: 2.5, ease: "easeOut" }} className="absolute inset-0">
-        <img src={IMAGES.hero} className="w-full h-full object-cover" alt="Hero Luxury Home" />
-        <div className="absolute inset-0 bg-black/5" />
-      </motion.div>
-      <div className="relative z-10 text-center px-6">
-        <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-zinc-900 text-[9px] font-bold uppercase tracking-[0.5em] mb-6 block">North Carolina — 2026</motion.span>
-        <motion.h1 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8 }} className="text-4xl md:text-7xl lg:text-8xl font-display font-light text-zinc-950 tracking-tight leading-[1.1] mb-12 max-w-5xl mx-auto">
-          The <span className="italic serif">New</span> Definition <br className="hidden md:block"/> Of <span className="italic serif">Timeless</span> Luxury.
-        </motion.h1>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button onClick={() => setCurrentPage('projects')} className="group px-10 py-5 bg-zinc-950 text-white rounded-full text-[9px] font-bold uppercase tracking-[0.3em] hover:bg-blue-600 transition-all shadow-xl flex items-center gap-3">
-            Explore Catalog <ArrowRight size={14} />
+const PropertyDetailModal = ({ property, onClose }) => (
+  <AnimatePresence>
+    {property && (
+      <motion.div 
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[250] flex items-center justify-center p-4 md:p-8 bg-black/80 backdrop-blur-xl"
+        onClick={onClose}
+      >
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0, y: 50 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 50 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+          className="bg-white w-full max-w-6xl max-h-[90vh] rounded-[3rem] overflow-hidden shadow-2xl relative flex flex-col md:flex-row"
+          onClick={e => e.stopPropagation()}
+        >
+          <button 
+            onClick={onClose} 
+            className="absolute top-6 right-6 z-10 w-12 h-12 bg-white/20 hover:bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-zinc-900 transition-all shadow-xl border border-white/20"
+          >
+            <X size={24} />
           </button>
-          <button onClick={() => setCurrentPage('studio')} className="px-10 py-5 bg-white/80 backdrop-blur border border-zinc-200 text-zinc-950 rounded-full text-[9px] font-bold uppercase tracking-[0.3em] hover:bg-zinc-50 transition-all">
-            About Velmor
-          </button>
-        </motion.div>
-      </div>
-    </section>
 
-    <section className="py-24 md:py-40 px-6 md:px-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-start">
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-        <span className="text-blue-600 text-[9px] font-bold uppercase tracking-[0.4em] block mb-6">Ethos & Vision</span>
-        <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-light text-zinc-950 leading-tight">Inspiration in <span className="italic serif text-zinc-400">every space</span>.</h2>
+          <div className="w-full md:w-1/2 h-64 md:h-auto overflow-hidden">
+            <img src={property.img} className="w-full h-full object-cover" alt={property.title} />
+          </div>
+
+          <div className="w-full md:w-1/2 p-10 md:p-16 overflow-y-auto bg-white flex flex-col">
+            <div className="flex items-center gap-2 text-emerald-600 text-[10px] font-bold uppercase tracking-widest mb-6">
+              <MapPin size={12}/> {property.location}
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-display italic serif text-emerald-950 mb-6 leading-tight">
+              {property.title}
+            </h2>
+
+            <div className="text-3xl font-display font-light text-emerald-900 italic serif mb-10 pb-6 border-b border-zinc-100">
+              {property.price}
+            </div>
+
+            <p className="text-zinc-500 text-lg leading-relaxed font-light mb-10 italic">
+              "{property.fullDesc}"
+            </p>
+
+            <div className="space-y-4 mb-12">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">Premium Features</p>
+              <div className="grid grid-cols-2 gap-4">
+                {property.features?.map((f, i) => (
+                  <div key={i} className="flex items-center gap-3 text-sm text-emerald-950 font-medium">
+                    <CheckCircle2 size={16} className="text-emerald-500"/> {f}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <button 
+              className="mt-auto w-full py-5 bg-emerald-950 text-white rounded-2xl font-bold uppercase tracking-widest text-[11px] hover:bg-emerald-700 transition-all flex items-center justify-center gap-3 shadow-xl active:scale-95"
+              onClick={onClose}
+            >
+              Contact Agent <ArrowUpRight size={18}/>
+            </button>
+          </div>
+        </motion.div>
       </motion.div>
-      <div className="space-y-6 text-zinc-500 font-light text-lg md:text-xl leading-relaxed">
-        <p>We guide your transition toward a more meaningful lifestyle through precise and artistic property curation across North Carolina.</p>
-        <button onClick={() => setCurrentPage('studio')} className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-950 group border-b border-zinc-200 pb-1 w-fit">
-          Discover Our Agency <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />
-        </button>
-      </div>
-    </section>
-  </div>
+    )}
+  </AnimatePresence>
 );
 
-const ProjectsPage = () => {
+const InquiryModal = ({ isOpen, onClose }) => (
+  <AnimatePresence>
+    {isOpen && (
+      <motion.div 
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-emerald-950/80 backdrop-blur-md"
+        onClick={onClose}
+      >
+        <motion.div 
+          initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
+          className="bg-white w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative"
+          onClick={e => e.stopPropagation()}
+        >
+          <button 
+            onClick={onClose} 
+            className="absolute top-6 right-6 text-zinc-400 hover:text-emerald-900 transition-colors"
+          >
+            <X size={24} />
+          </button>
+
+          <h3 className="text-3xl font-display italic serif text-emerald-950 mb-2">Service Inquiry</h3>
+          <p className="text-zinc-500 text-sm mb-8 italic">Get our exclusive brochure and professional property assessment.</p>
+          
+          <div className="space-y-4">
+            <div className="space-y-1">
+              <label className="text-[8px] uppercase font-bold text-zinc-400 tracking-widest ml-1">Full Name</label>
+              <input type="text" placeholder="Enter your full name" className="w-full bg-zinc-50 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[8px] uppercase font-bold text-zinc-400 tracking-widest ml-1">Email Address</label>
+              <input type="email" placeholder="you@domain.com" className="w-full bg-zinc-50 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[8px] uppercase font-bold text-zinc-400 tracking-widest ml-1">Interest</label>
+              <select className="w-full bg-zinc-50 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm bg-transparent">
+                <option>Residential Portfolio</option>
+                <option>Commercial Acquisition</option>
+                <option>Asset Management</option>
+              </select>
+            </div>
+            <button className="w-full bg-emerald-900 text-white py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest mt-6 hover:bg-emerald-700 transition-all shadow-lg active:scale-95">Submit Request</button>
+          </div>
+        </motion.div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
+const HomePage = ({ setCurrentPage }) => {
+  return (
+    <div className="w-full overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <motion.div 
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="absolute inset-0 z-0"
+        >
+          <img src="https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600" className="w-full h-full object-cover" alt="Hero" />
+          <div className="absolute inset-0 bg-gradient-to-b from-emerald-950/60 via-transparent to-emerald-950/80" />
+        </motion.div>
+        <div className="relative z-10 text-center px-6">
+          <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-emerald-300 text-[10px] uppercase tracking-[0.4em] font-bold mb-6 block">Exclusive Realty - North Carolina</motion.span>
+          <motion.h1 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 0.8 }} className="text-5xl md:text-8xl font-display font-light text-white italic serif mb-10 leading-[0.9]">
+            Architectural <br/><span className="not-italic text-white">Legacy.</span>
+          </motion.h1>
+          <motion.button 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+            onClick={() => setCurrentPage('projects')} 
+            className="bg-white text-emerald-950 px-10 py-5 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all shadow-xl active:scale-95"
+          >
+            View Collection
+          </motion.button>
+        </div>
+      </section>
+
+      <section className="py-32 px-6 bg-white reveal-section">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-display italic serif text-emerald-950 mb-12">The Velmor Advantage</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-left mt-20">
+            <div className="space-y-4 group">
+              <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500"><Globe size={24}/></div>
+              <h4 className="text-lg font-display font-bold text-emerald-950">Global Network</h4>
+              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Access to off-market properties and international investors through our verified channels.</p>
+            </div>
+            <div className="space-y-4 group">
+              <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500"><CheckCircle2 size={24}/></div>
+              <h4 className="text-lg font-display font-bold text-emerald-950">Curated Quality</h4>
+              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Every listing undergoes a rigorous 50-point inspection for structural and aesthetic excellence.</p>
+            </div>
+            <div className="space-y-4 group">
+              <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500"><Building2 size={24}/></div>
+              <h4 className="text-lg font-display font-bold text-emerald-950">Market Intelligence</h4>
+              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Data-driven insights ensuring your investment appreciates at an optimal annual rate.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+const ProjectsPage = ({ onSelectProperty }) => {
   const [filter, setFilter] = useState('All');
-  const [selected, setSelected] = useState(null);
+  const categories = [
+    { id: 'All', icon: <LayoutGrid size={14}/> },
+    { id: 'Residential', icon: <Home size={14}/> },
+    { id: 'Commercial', icon: <Building2 size={14}/> },
+    { id: 'Land', icon: <TreePine size={14}/> }
+  ];
+
   const filteredData = filter === 'All' ? PROPERTY_DATA : PROPERTY_DATA.filter(p => p.category === filter);
 
   return (
-    <section className="pt-32 md:pt-40 pb-24 px-6 md:px-10 bg-white min-h-screen">
+    <section className="pt-40 pb-24 px-6 bg-zinc-50 min-h-screen">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <header className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <span className="text-zinc-400 uppercase tracking-[0.3em] text-[9px] font-bold mb-3 block">Portfolio</span>
-            <h2 className="text-4xl md:text-6xl font-display font-light text-zinc-950 italic serif">Property Catalog</h2>
+            <span className="text-emerald-700 text-[10px] font-bold uppercase tracking-widest block mb-4 italic">Available Listings</span>
+            <h2 className="text-5xl font-display italic serif text-emerald-950 leading-tight">Masterpieces of <br/>Architecture.</h2>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {['All', 'Residential', 'Commercial', 'Land'].map((cat) => (
-              <button key={cat} onClick={() => setFilter(cat)} className={`px-6 py-3 rounded-full text-[9px] uppercase tracking-widest font-bold border transition-all ${filter === cat ? 'bg-zinc-950 text-white border-zinc-950 shadow-lg' : 'bg-transparent text-zinc-400 border-zinc-100 hover:border-zinc-200'}`}>
-                {cat}
+          
+          <div className="flex flex-wrap gap-3 p-1.5 bg-zinc-200/50 rounded-2xl backdrop-blur-sm border border-zinc-300/30">
+            {categories.map(cat => (
+              <button 
+                key={cat.id}
+                onClick={() => setFilter(cat.id)}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all ${filter === cat.id ? 'bg-emerald-900 text-white shadow-lg' : 'text-zinc-500 hover:bg-white'}`}
+              >
+                {cat.icon} {cat.id}
               </button>
             ))}
           </div>
         </header>
-        
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-16 md:gap-y-20">
+
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           <AnimatePresence mode="popLayout">
-            {filteredData.map((p) => (
+            {filteredData.map((p, idx) => (
               <motion.div 
-                layout key={p.id} initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.6 }}
-                className="group cursor-pointer" onClick={() => setSelected(p)}
+                key={p.id}
+                layout
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.6, delay: idx * 0.05 }}
+                onClick={() => onSelectProperty(p)}
+                className="bg-white rounded-[2.5rem] overflow-hidden border border-zinc-100 group shadow-sm hover:shadow-2xl transition-all duration-700 cursor-pointer flex flex-col h-full"
               >
-                <div className="relative aspect-[16/10] rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden mb-6 shadow-sm bg-zinc-100">
-                  <motion.img src={p.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt={p.title} />
-                  <div className="absolute inset-0 bg-zinc-950/0 group-hover:bg-zinc-950/20 transition-colors duration-500" />
-                </div>
-                <div className="flex justify-between items-start px-2">
-                  <div className="space-y-1">
-                    <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">{p.location}</p>
-                    <h3 className="text-2xl md:text-3xl font-display font-light text-zinc-950 italic serif group-hover:not-italic transition-all duration-500">{p.title}</h3>
-                    <p className="text-lg md:text-xl font-display text-zinc-400 font-light">{p.price}</p>
+                <div className="aspect-[4/3] overflow-hidden relative">
+                  <img src={p.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt={p.title} />
+                  <div className="absolute top-6 left-6 px-4 py-1.5 bg-white/90 backdrop-blur rounded-full text-[8px] font-black uppercase tracking-tighter text-emerald-900 shadow-sm border border-emerald-950/5">
+                    {p.category}
                   </div>
-                  <div className="w-10 h-10 md:w-12 md:h-12 border border-zinc-100 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
-                    <ArrowUpRight size={18} strokeWidth={1.5} />
+                  <div className="absolute inset-0 bg-emerald-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="bg-white/90 p-4 rounded-full text-emerald-950 shadow-2xl scale-50 group-hover:scale-100 transition-transform duration-500">
+                        <Maximize2 size={20} />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-8 flex flex-col flex-grow">
+                  <div className="flex items-center gap-2 text-zinc-400 text-[9px] uppercase tracking-widest mb-3">
+                    <MapPin size={10} className="text-emerald-500"/> {p.location}
+                  </div>
+                  <h3 className="text-2xl font-display text-emerald-950 mb-6 group-hover:text-emerald-700 transition-colors flex-grow italic serif">{p.title}</h3>
+                  <div className="flex justify-between items-center pt-6 border-t border-zinc-50">
+                    <span className="text-emerald-900 font-bold italic serif text-xl">{p.price}</span>
+                    <div className="w-12 h-12 rounded-full bg-zinc-50 flex items-center justify-center text-zinc-400 group-hover:bg-emerald-950 group-hover:text-white transition-all shadow-sm group-hover:rotate-45 duration-500">
+                      <ArrowUpRight size={18} />
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -156,53 +385,77 @@ const ProjectsPage = () => {
           </AnimatePresence>
         </motion.div>
       </div>
-
-      <AnimatePresence>
-        {selected && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/90 backdrop-blur-md p-4" onClick={() => setSelected(null)}>
-            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 50, opacity: 0 }} className="bg-white w-full max-w-5xl max-h-[85vh] rounded-[3rem] overflow-hidden flex flex-col md:flex-row relative" onClick={e => e.stopPropagation()}>
-              <button onClick={() => setSelected(null)} className="absolute top-6 right-6 z-30 p-3 bg-zinc-950 text-white rounded-full hover:bg-blue-600 transition-all"><X size={18} /></button>
-              <div className="w-full md:w-1/2 h-56 md:h-auto"><img src={selected.img} className="w-full h-full object-cover" alt="" /></div>
-              <div className="w-full md:w-1/2 p-10 md:p-14 flex flex-col overflow-y-auto">
-                <span className="text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-4">{selected.category}</span>
-                <h2 className="text-4xl font-display font-light text-zinc-950 mb-6 italic serif">{selected.title}</h2>
-                <p className="text-zinc-500 font-light text-lg leading-relaxed mb-10">{selected.fullDesc}</p>
-                <div className="pt-8 flex items-center justify-between border-t border-zinc-100 mt-auto">
-                  <p className="text-3xl font-display font-light">{selected.price}</p>
-                  <button className="bg-blue-600 text-white px-8 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-950 transition-colors">Inquiry</button>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 };
 
-const StudioPage = () => {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({ target: ref });
-  const y = useTransform(scrollYProgress, [0, 1], [0, -60]);
-
+const AgencyPage = () => {
   return (
-    <section ref={ref} className="py-24 md:py-40 px-6 md:px-10 bg-zinc-50 overflow-hidden">
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 md:gap-24">
-        <div className="w-full lg:w-1/2 relative">
-          <motion.div style={{ borderRadius: "10rem 2rem 10rem 2rem" }} className="aspect-[3/2] overflow-hidden shadow-xl relative bg-zinc-200">
-            <motion.img src={IMAGES.agency} style={{ y }} className="w-full h-full object-cover scale-110" alt="Agency Color" />
+    <section className="pt-40 pb-24 px-6 bg-white min-h-screen">
+      <div className="max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="relative group"
+          >
+            <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1200" className="w-full aspect-[4/5] object-cover rounded-[3rem] shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]" alt="Agency" />
+            <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-emerald-600 rounded-[2.5rem] flex items-center justify-center p-8 text-white hidden md:flex shadow-2xl border-8 border-white hover:rotate-6 transition-transform duration-500">
+              <p className="text-xl font-display font-bold italic serif leading-tight">Driven by Design & Discipline.</p>
+            </div>
           </motion.div>
-          <div className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 bg-white p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] shadow-xl border border-zinc-100 hidden sm:block">
-            <p className="text-5xl md:text-6xl font-display font-light italic serif leading-none mb-1">98%</p>
-            <p className="text-[9px] uppercase font-bold text-zinc-400 tracking-widest">Satisfaction Rate</p>
+          <div className="space-y-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <span className="text-emerald-600 text-[10px] font-bold uppercase tracking-widest mb-4 block italic">Our Philosophy</span>
+              <h2 className="text-5xl md:text-6xl font-display italic serif text-emerald-950 mb-8 leading-tight">Defining Standards for Elite NC Properties.</h2>
+              <p className="text-lg text-zinc-500 font-light leading-relaxed italic">
+                "We represent a standard of living where every detail matters. Velmor exists to connect visionary individuals with extraordinary spaces."
+              </p>
+            </motion.div>
+            
+            <div className="grid grid-cols-1 gap-6">
+               <motion.div 
+                 whileHover={{ x: 10 }}
+                 className="flex gap-4 p-6 bg-zinc-50 rounded-3xl hover:bg-emerald-50 transition-colors border border-zinc-100"
+                >
+                  <div className="text-emerald-600"><Layers size={24}/></div>
+                  <div>
+                    <h4 className="font-bold text-emerald-950 mb-1 italic serif">Seamless Transactions</h4>
+                    <p className="text-sm text-zinc-500 font-light">White-glove service covering legal, structural, and financial aspects of your acquisition.</p>
+                  </div>
+               </motion.div>
+               <motion.div 
+                 whileHover={{ x: 10 }}
+                 className="flex gap-4 p-6 bg-zinc-50 rounded-3xl hover:bg-emerald-50 transition-colors border border-zinc-100"
+                >
+                  <div className="text-emerald-600"><Sparkles size={24}/></div>
+                  <div>
+                    <h4 className="font-bold text-emerald-950 mb-1 italic serif">Sustainable Luxury</h4>
+                    <p className="text-sm text-zinc-500 font-light">Prioritizing eco-conscious designs that don't compromise on comfort or grandeur.</p>
+                  </div>
+               </motion.div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-6 pt-10 border-t border-zinc-100">
+              <div>
+                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic serif">850+</h4>
+                <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">Successful Closings</p>
+              </div>
+              <div>
+                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic serif">15+</h4>
+                <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">Design Awards</p>
+              </div>
+              <div>
+                <h4 className="text-3xl font-display font-bold text-emerald-900 mb-1 italic serif">Top 1%</h4>
+                <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-widest">Agency Ranking</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="w-full lg:w-1/2 space-y-8 md:space-y-10">
-          <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.4em]">Our Agency</span>
-          <h2 className="text-4xl md:text-6xl font-display font-light leading-tight italic serif text-zinc-950">Visions <span className="not-italic">Beyond Borders</span>.</h2>
-          <p className="text-zinc-500 text-lg md:text-xl font-light leading-relaxed">
-            Velmor combines global data analytics with a personal touch to ensure every property is a strategic lifestyle investment.
-          </p>
         </div>
       </div>
     </section>
@@ -210,19 +463,58 @@ const StudioPage = () => {
 };
 
 const ContactPage = () => (
-  <section className="py-32 md:py-40 px-6 md:px-10 bg-white min-h-[80vh] flex items-center">
-    <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
-      <div className="flex flex-col justify-center">
-        <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 block">Contact Us</span>
-        <h2 className="text-4xl md:text-7xl font-display font-light tracking-tighter leading-tight mb-12 italic serif text-zinc-950">Bring Your <span className="not-italic">Destination</span> To Life.</h2>
-      </div>
-      <div className="bg-zinc-50 p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] border border-zinc-100 shadow-sm">
-        <form className="space-y-10" onSubmit={e => e.preventDefault()}>
-          {['Name', 'Subject', 'Email'].map((f) => (
-            <input key={f} type="text" className="w-full bg-transparent border-b border-zinc-200 py-4 text-xl font-light focus:outline-none focus:border-blue-600 transition-all placeholder:text-zinc-300" placeholder={f} />
-          ))}
-          <button className="w-full py-5 rounded-full bg-zinc-950 text-white text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-blue-600 transition-all shadow-lg">Submit</button>
-        </form>
+  <section className="pt-40 pb-24 px-6 bg-emerald-950 min-h-screen">
+    <div className="max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+        <div className="text-white space-y-12">
+          <h2 className="text-5xl md:text-7xl font-display italic serif leading-none">Your journey starts <span className="text-emerald-400">here.</span></h2>
+          <div className="space-y-8 pt-6">
+            <div className="flex gap-6 items-start group">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-emerald-400 border border-white/10 shadow-lg group-hover:bg-emerald-400 group-hover:text-emerald-950 transition-all duration-500"><Phone size={22}/></div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold mb-1 italic">Direct Line</p>
+                <p className="text-2xl font-light tracking-tight">+1 (919) 444-2026</p>
+              </div>
+            </div>
+            <div className="flex gap-6 items-start group">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-emerald-400 border border-white/10 shadow-lg group-hover:bg-emerald-400 group-hover:text-emerald-950 transition-all duration-500"><Mail size={22}/></div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold mb-1 italic">Inquiries</p>
+                <p className="text-2xl font-light tracking-tight">concierge@velmor.com</p>
+              </div>
+            </div>
+            <div className="flex gap-6 items-start group">
+              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-emerald-400 border border-white/10 shadow-lg group-hover:bg-emerald-400 group-hover:text-emerald-950 transition-all duration-500"><MapPin size={22}/></div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-emerald-500 font-bold mb-1 italic">Presence</p>
+                <p className="text-xl font-light leading-relaxed">Executive Tower, Charlotte, NC 28202</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-10 md:p-16 rounded-[4rem] shadow-2xl self-center">
+          <h3 className="text-3xl font-display italic serif text-emerald-950 mb-10">Private Inquiry</h3>
+          <form className="space-y-8" onSubmit={e => e.preventDefault()}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-[8px] uppercase font-bold text-zinc-400 tracking-widest ml-1">Your Name</label>
+                <input type="text" placeholder="Johnathan Doe" className="w-full bg-zinc-50 rounded-xl px-5 py-4 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm italic" />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[8px] uppercase font-bold text-zinc-400 tracking-widest ml-1">Email</label>
+                <input type="email" placeholder="john@domain.com" className="w-full bg-zinc-50 rounded-xl px-5 py-4 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm italic" />
+              </div>
+            </div>
+            <div className="space-y-2">
+                <label className="text-[8px] uppercase font-bold text-zinc-400 tracking-widest ml-1">How can we assist?</label>
+                <textarea placeholder="Describe your specific requirements..." rows="4" className="w-full bg-zinc-50 rounded-2xl px-5 py-4 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm resize-none italic"></textarea>
+            </div>
+            <button className="w-full py-6 bg-emerald-900 text-white rounded-2xl font-bold uppercase tracking-widest text-[11px] hover:bg-emerald-600 transition-all flex items-center justify-center gap-3 shadow-xl group active:scale-[0.98]">
+              Send Inquiry <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform"/>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -230,121 +522,57 @@ const ContactPage = () => (
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
-  const [isLoading, setIsLoading] = useState(true);
-  const lenisRef = useRef(null);
+  const [showInquiry, setShowInquiry] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { immediate: true });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentPage]);
 
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js";
-    script.async = true;
-    script.onload = () => {
-      
-      setTimeout(() => {
-        try {
-          const lenis = new Lenis({ 
-            duration: 1.2, 
-            smoothWheel: true,
-            wheelMultiplier: 1,
-            touchMultiplier: 2,
-            infinite: false,
-          });
-
-          lenisRef.current = lenis;
-          
-          function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-          }
-          requestAnimationFrame(raf);
-          
-          // Memastikan body bisa di-scroll
-          document.body.style.overflow = 'auto';
-          document.documentElement.style.overflow = 'auto';
-        } catch (e) {
-          console.error("Lenis init failed, falling back to native scroll", e);
-        }
-      }, 100);
-    };
-    document.head.appendChild(script);
-
-    return () => {
-      if (lenisRef.current) lenisRef.current.destroy();
-    };
-  }, []);
-
   return (
-    <div className="bg-white selection:bg-blue-600 selection:text-white antialiased font-sans text-zinc-950 min-h-screen">
-      <AnimatePresence mode="wait">
-        {isLoading && <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />}
+    <div className="bg-white selection:bg-emerald-900 selection:text-white antialiased overflow-x-hidden">
+      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} setShowInquiry={setShowInquiry} />
+      
+      <AnimatePresence>
+        {showInquiry && <InquiryModal isOpen={showInquiry} onClose={() => setShowInquiry(false)} />}
       </AnimatePresence>
+
+      <PropertyDetailModal property={selectedProperty} onClose={() => setSelectedProperty(null)} />
       
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      
-      <main className="relative z-10">
+      <main>
         <AnimatePresence mode="wait">
           <motion.div 
             key={currentPage} 
-            initial={{ opacity: 0, y: 10 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            exit={{ opacity: 0, y: -10 }} 
-            transition={{ duration: 0.4 }}
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "circOut" }}
           >
             {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
-            {currentPage === 'projects' && <ProjectsPage />}
-            {currentPage === 'studio' && <StudioPage />}
+            {currentPage === 'projects' && <ProjectsPage onSelectProperty={setSelectedProperty} />}
+            {currentPage === 'agency' && <AgencyPage />}
             {currentPage === 'contact' && <ContactPage />}
           </motion.div>
         </AnimatePresence>
       </main>
 
-      <footer className="bg-white py-20 px-6 md:px-10 border-t border-zinc-100 relative z-10">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 text-zinc-400">
-          <div className="max-w-xs space-y-4">
-            <h4 className="font-display font-medium text-zinc-950 text-2xl italic serif">Velmor<span className="text-blue-600 not-italic">.</span></h4>
-            <p className="text-xs font-light">Elevating North Carolina's luxury living standards.</p>
+      <footer className="bg-zinc-950 py-24 px-8 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-12">
+            <div className="text-white text-3xl font-display italic serif">
+              Velmor<span className="text-emerald-500 not-italic">.</span>
+            </div>
+            <div className="flex gap-8 text-[10px] uppercase font-bold tracking-widest text-zinc-500">
+              <a href="#" className="hover:text-emerald-400 transition-colors">Instagram</a>
+              <a href="#" className="hover:text-emerald-400 transition-colors">LinkedIn</a>
+              <a href="#" className="hover:text-emerald-400 transition-colors">Twitter</a>
+            </div>
+            <div className="text-zinc-600 text-[10px] uppercase font-bold tracking-widest">
+              © 2026 Velmor Agency. Registered Real Estate.
+            </div>
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">© 2026 Velmor Agency. All rights reserved.</p>
         </div>
       </footer>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&family=Inter:wght@300;400;600&display=swap');
-        
-        :root {
-          --scroll-behavior: auto !important;
-        }
-
-        html, body {
-          margin: 0;
-          padding: 0;
-          width: 100%;
-          min-height: 100%;
-          overflow-x: hidden;
-          background-color: white;
-          -webkit-font-smoothing: antialiased;
-        }
-        
-        body {
-          overflow-y: auto !important;
-          height: auto !important;
-          position: relative !important;
-        }
-
-        .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
-        .font-sans { font-family: 'Inter', sans-serif; }
-        .serif { font-family: 'Cormorant Garamond', serif; }
-        
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 10px; }
-      `}</style>
     </div>
   );
 }
