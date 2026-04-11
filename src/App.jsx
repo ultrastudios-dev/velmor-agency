@@ -37,7 +37,7 @@ const PROPERTY_DATA = [
     price: "$1,890,000", 
     img: "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=800", 
     location: "Raleigh, NC", 
-    fullDesc: "The Obsidian Glass House offers uncompromising privacy through thin gold-layered one-way glass that reflects the landscape while maintaining interior luminosity.",
+    fullDesc: "The Obsidian Glass House offers uncompromising privacy through thin gold layered one way glass that reflects the landscape while maintaining interior luminosity.",
     features: ["Minimalist Design", "Solar Power", "Private Gallery"]
   },
   { 
@@ -47,7 +47,7 @@ const PROPERTY_DATA = [
     price: "$12,500,000", 
     img: "https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800", 
     location: "Durham, NC", 
-    fullDesc: "As the center of business gravity in Durham, The Monolith Center redefines the post-2025 workspace with AI integration on every floor.",
+    fullDesc: "As the center of business gravity in Durham, The Monolith Center redefines the post 2026 workspace with AI integration on every floor.",
     features: ["Tech Hub", "Co-working Spaces", "Zero Carbon Emission"]
   },
   { 
@@ -77,7 +77,7 @@ const PROPERTY_DATA = [
     price: "$8,200,000", 
     img: "https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=800", 
     location: "Cary, NC", 
-    fullDesc: "A futuristic office complex in the heart of the Research Triangle. Specifically designed for high-level technology companies.",
+    fullDesc: "A futuristic office complex in the heart of the Research Triangle. Specifically designed for high level technology companies.",
     features: ["Research Lab", "Event Hall", "Heliport"]
   }
 ];
@@ -120,7 +120,6 @@ const Navbar = ({ currentPage, setCurrentPage, setShowInquiry }) => {
             Velmor<span className="text-emerald-500 not-italic">.</span>
           </button>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             {menuItems.map((item) => (
               <button 
@@ -148,8 +147,7 @@ const Navbar = ({ currentPage, setCurrentPage, setShowInquiry }) => {
             }`}>
               Services
             </button>
-
-            {/* Hamburger Button (Mobile Only) */}
+            
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
               className={`md:hidden p-2 rounded-full transition-colors ${isScrolled ? 'text-emerald-950 hover:bg-zinc-100' : 'text-white hover:bg-white/10'}`}
@@ -159,8 +157,7 @@ const Navbar = ({ currentPage, setCurrentPage, setShowInquiry }) => {
           </div>
         </motion.nav>
       </div>
-
-      {/* Mobile Menu Overlay */}
+      
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div 
@@ -502,7 +499,7 @@ const AgencyPage = () => {
                     <p className="text-sm text-zinc-500 font-light">Prioritizing eco-conscious designs that don't compromise on comfort or grandeur.</p>
                   </div>
                </motion.div>
-            </div>
+            </div> 
 
             <div className="grid grid-cols-3 gap-6 pt-10 border-t border-zinc-100">
               <div>
