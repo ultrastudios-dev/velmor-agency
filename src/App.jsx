@@ -15,7 +15,8 @@ import {
   X,
   Maximize2,
   Layers,
-  Sparkles
+  Sparkles,
+  Menu
 } from 'lucide-react';
 
 const PROPERTY_DATA = [
@@ -83,6 +84,7 @@ const PROPERTY_DATA = [
 
 const Navbar = ({ currentPage, setCurrentPage, setShowInquiry }) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -97,49 +99,110 @@ const Navbar = ({ currentPage, setCurrentPage, setShowInquiry }) => {
     { id: 'contact', label: 'Contact' }
   ];
 
+  const handleNavClick = (id) => {
+    setCurrentPage(id);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div className="fixed top-6 left-0 w-full z-[100] px-6 flex justify-center pointer-events-none">
-      <motion.nav 
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className={`pointer-events-auto flex items-center justify-between gap-8 px-8 py-3.5 rounded-full transition-all duration-700 border ${
-          isScrolled 
-          ? 'bg-white/80 backdrop-blur-xl border-zinc-200/50 shadow-2xl w-full max-w-4xl' 
-          : 'bg-emerald-950/20 backdrop-blur-sm border-white/10 w-full max-w-6xl'
-        }`}
-      >
-        <button onClick={() => setCurrentPage('home')} className={`text-xl font-display font-medium italic serif transition-colors ${isScrolled ? 'text-emerald-950' : 'text-white'}`}>
-          Velmor<span className="text-emerald-500 not-italic">.</span>
-        </button>
+    <>
+      <div className="fixed top-6 left-0 w-full z-[100] px-6 flex justify-center pointer-events-none">
+        <motion.nav 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className={`pointer-events-auto flex items-center justify-between gap-8 px-8 py-3.5 rounded-full transition-all duration-700 border ${
+            isScrolled 
+            ? 'bg-white/80 backdrop-blur-xl border-zinc-200/50 shadow-2xl w-full max-w-4xl' 
+            : 'bg-emerald-950/20 backdrop-blur-sm border-white/10 w-full max-w-6xl'
+          }`}
+        >
+          <button onClick={() => setCurrentPage('home')} className={`text-xl font-display font-medium italic serif transition-colors ${isScrolled ? 'text-emerald-950' : 'text-white'}`}>
+            Velmor<span className="text-emerald-500 not-italic">.</span>
+          </button>
 
-        <div className="hidden md:flex items-center gap-8">
-          {menuItems.map((item) => (
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center gap-8">
+            {menuItems.map((item) => (
+              <button 
+                key={item.id} 
+                onClick={() => setCurrentPage(item.id)} 
+                className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-all relative group ${
+                  isScrolled 
+                  ? (currentPage === item.id ? 'text-emerald-700' : 'text-zinc-400 hover:text-emerald-950') 
+                  : (currentPage === item.id ? 'text-emerald-300' : 'text-white/60 hover:text-white')
+                }`}
+              >
+                {item.label}
+                <span className={`absolute -bottom-1 left-0 h-[1.5px] bg-emerald-500 transition-all duration-500 ${currentPage === item.id ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-4">
             <button 
-              key={item.id} 
-              onClick={() => setCurrentPage(item.id)} 
-              className={`text-[10px] uppercase tracking-[0.2em] font-bold transition-all relative group ${
-                isScrolled 
-                ? (currentPage === item.id ? 'text-emerald-700' : 'text-zinc-400 hover:text-emerald-950') 
-                : (currentPage === item.id ? 'text-emerald-300' : 'text-white/60 hover:text-white')
-              }`}
-            >
-              {item.label}
-              <span className={`absolute -bottom-1 left-0 h-[1.5px] bg-emerald-500 transition-all duration-500 ${currentPage === item.id ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+              onClick={() => setShowInquiry(true)}
+              className={`px-6 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all active:scale-95 ${
+              isScrolled 
+              ? 'bg-emerald-900 text-white hover:bg-emerald-700' 
+              : 'bg-white text-emerald-950 hover:bg-emerald-50 shadow-lg'
+            }`}>
+              Services
             </button>
-          ))}
-        </div>
 
-        <button 
-          onClick={() => setShowInquiry(true)}
-          className={`px-6 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-widest transition-all active:scale-95 ${
-          isScrolled 
-          ? 'bg-emerald-900 text-white hover:bg-emerald-700' 
-          : 'bg-white text-emerald-950 hover:bg-emerald-50 shadow-lg'
-        }`}>
-          Services
-        </button>
-      </motion.nav>
-    </div>
+            {/* Hamburger Button (Mobile Only) */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className={`md:hidden p-2 rounded-full transition-colors ${isScrolled ? 'text-emerald-950 hover:bg-zinc-100' : 'text-white hover:bg-white/10'}`}
+            >
+              <Menu size={20} />
+            </button>
+          </div>
+        </motion.nav>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[150] bg-emerald-950 flex flex-col items-center justify-center p-8"
+          >
+            <button 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute top-10 right-10 text-white/50 hover:text-white transition-colors p-2"
+            >
+              <X size={32} />
+            </button>
+
+            <div className="flex flex-col items-center gap-8">
+              {menuItems.map((item, idx) => (
+                <motion.button
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  onClick={() => handleNavClick(item.id)}
+                  className={`text-4xl font-display italic serif ${currentPage === item.id ? 'text-emerald-400' : 'text-white'}`}
+                >
+                  {item.label}
+                </motion.button>
+              ))}
+            </div>
+
+            <div className="absolute bottom-12 flex flex-col items-center gap-4 text-white/40">
+              <p className="text-[10px] uppercase tracking-[0.3em] font-bold">Velmor Luxury Estates</p>
+              <div className="flex gap-6">
+                <Mail size={16} />
+                <Phone size={16} />
+                <Globe size={16} />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
@@ -531,7 +594,7 @@ export default function App() {
 
   return (
     <div className="bg-white selection:bg-emerald-900 selection:text-white antialiased overflow-x-hidden">
-      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} setShowInquiry={setShowInquiry} />
+      <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} setShowInquiry={() => setShowInquiry(true)} />
       
       <AnimatePresence>
         {showInquiry && <InquiryModal isOpen={showInquiry} onClose={() => setShowInquiry(false)} />}
