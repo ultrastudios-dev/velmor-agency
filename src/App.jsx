@@ -352,17 +352,17 @@ const HomePage = ({ setCurrentPage }) => {
             <div className="space-y-4 group">
               <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500"><Globe size={24}/></div>
               <h4 className="text-lg font-display font-bold text-emerald-950">Global Network</h4>
-              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Access to off-market properties and international investors through our verified channels.</p>
+              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Access to off market properties and international investors through our verified channels.</p>
             </div>
             <div className="space-y-4 group">
               <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500"><CheckCircle2 size={24}/></div>
               <h4 className="text-lg font-display font-bold text-emerald-950">Curated Quality</h4>
-              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Every listing undergoes a rigorous 50-point inspection for structural and aesthetic excellence.</p>
+              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Every listing undergoes a rigorous 50 point inspection for structural and aesthetic excellence.</p>
             </div>
             <div className="space-y-4 group">
               <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shadow-sm group-hover:bg-emerald-900 group-hover:text-white transition-all duration-500"><Building2 size={24}/></div>
               <h4 className="text-lg font-display font-bold text-emerald-950">Market Intelligence</h4>
-              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Data-driven insights ensuring your investment appreciates at an optimal annual rate.</p>
+              <p className="text-sm text-zinc-500 leading-relaxed font-light italic">Data driven insights ensuring your investment appreciates at an optimal annual rate.</p>
             </div>
           </div>
         </div>
