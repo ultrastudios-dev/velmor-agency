@@ -1,17 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   X, 
-  Menu,
-  ArrowRight,
-  Instagram,
-  Linkedin,
-  MapPin,
-  Plus,
-  Phone,
   ArrowUpRight,
-  CheckCircle2,
-  Calendar
+  ArrowRight
 } from 'lucide-react';
 
 const IMAGES = {
@@ -20,124 +12,34 @@ const IMAGES = {
   project2: "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=800",
   project3: "https://images.pexels.com/photos/277667/pexels-photo-277667.jpeg?auto=compress&cs=tinysrgb&w=800",
   project4: "https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800",
+  commercial1: "https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800",
+  commercial2: "https://images.pexels.com/photos/37347/office-sitting-room-executive-sitting.jpg?auto=compress&cs=tinysrgb&w=800",
+  land1: "https://images.pexels.com/photos/46160/field-clouds-sky-earth-46160.jpeg?auto=compress&cs=tinysrgb&w=800",
+  land2: "https://images.pexels.com/photos/1001682/pexels-photo-1001682.jpeg?auto=compress&cs=tinysrgb&w=800",
   agency: "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1200"
 };
 
 const PROPERTY_DATA = [
-  { 
-    id: 1,
-    title: "Charlotte Zenith Villa", 
-    price: "$2,450,000", 
-    img: IMAGES.project1,
-    location: "Charlotte, NC",
-    fullDesc: "Located in Charlotte's elite district, Zenith Villa represents the new standard for post-2025 living. This property features integrated transparent solar panels and a HEPA 14 air filtration system for all rooms. The interior embraces the 'Eco Modernist' concept with sustainably processed local cedar wood. It boasts 5 spacious bedrooms, an infinity pool with skyline views, and the latest generation of biometric security systems."
-  },
-  { 
-    id: 2,
-    title: "Raleigh Glass Estate", 
-    price: "$1,890,000", 
-    img: IMAGES.project2,
-    location: "Raleigh, NC",
-    fullDesc: "A masterpiece of minimalist architecture on the outskirts of Raleigh. This estate utilizes adaptive glass that changes opacity based on solar intensity, reducing energy costs by up to 40%. The open concept interior design provides a sense of space, seamlessly merging with a central zen garden. Perfect for tech professionals seeking tranquility near the Research Triangle Park."
-  },
-  { 
-    id: 3,
-    title: "Asheville Cloud Retreat", 
-    price: "$3,100,000", 
-    img: IMAGES.project3,
-    location: "Asheville, NC",
-    fullDesc: "Nestled in the Blue Ridge Mountains, Cloud Retreat offers absolute privacy amidst North Carolina's wilderness. Built with earthquake and extreme weather resistant structures, this home is a fortress of comfort. Amenities include a private spa, a temperature controlled underground wine cellar, and a 360 degree observation deck. This property is a long term investment for those valuing spiritual peace and pure mountain air."
-  },
-  { 
-    id: 4,
-    title: "Wilmington Azure View", 
-    price: "$2,720,000", 
-    img: IMAGES.project4,
-    location: "Wilmington, NC",
-    fullDesc: "A waterfront residence defining coastal luxury. Azure View is designed to withstand rising sea levels with advanced hydraulic foundations and salt corrosion resistant materials. It features direct access to a private beach and a yacht pier. The nautical modern interior features white marble floors and smart lighting that adjusts to the residents' circadian rhythms."
-  }
+  { id: 1, category: 'Residential', title: "Charlotte Zenith Villa", price: "$2,450,000", img: IMAGES.project1, location: "Charlotte, NC", fullDesc: "A contemporary masterpiece in Myers Park featuring 20-foot ceilings and private vertical gardens." },
+  { id: 2, category: 'Residential', title: "Raleigh Glass Estate", price: "$1,890,000", img: IMAGES.project2, location: "Raleigh, NC", fullDesc: "Industrial aesthetics with continuous glass walls that merge seamlessly with the Research Triangle nature." },
+  { id: 3, category: 'Commercial', title: "Triangle Tech Hub", price: "$12,500,000", img: IMAGES.commercial1, location: "Durham, NC", fullDesc: "Grade A LEED Platinum complex featuring rooftop lounges and cutting-edge technology facilities." },
+  { id: 4, category: 'Commercial', title: "The Meridian Office", price: "$8,200,000", img: IMAGES.commercial2, location: "Charlotte, NC", fullDesc: "Modular office spaces in the prime business district with 360-degree city skyline views." },
+  { id: 5, category: 'Land', title: "Blue Ridge Sanctuary", price: "$3,100,000", img: IMAGES.land1, location: "Asheville, NC", fullDesc: "25 acres of exclusive mountain slope land, ideal for luxury resorts or private estates." },
+  { id: 6, category: 'Land', title: "Coastal Horizon Lot", price: "$2,720,000", img: IMAGES.land2, location: "Wilmington, NC", fullDesc: "Prime beachfront lot in Wrightsville Beach with permits for an exclusive waterfront residential development." },
+  { id: 7, category: 'Residential', title: "Asheville Cloud Retreat", price: "$3,100,000", img: IMAGES.project3, location: "Asheville, NC", fullDesc: "Sustainable living crafted from local natural materials with dramatic mountain vistas." },
+  { id: 8, category: 'Residential', title: "Wilmington Azure View", price: "$2,720,000", img: IMAGES.project4, location: "Wilmington, NC", fullDesc: "Coastal luxury featuring expansive sun decks and private dock access for a maritime lifestyle." }
 ];
 
-const Reveal = ({ children, delay = 0.2 }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+const LoadingScreen = ({ onComplete }) => {
+  useEffect(() => {
+    const timer = setTimeout(onComplete, 1200);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
 
   return (
-    <div ref={ref} className="relative w-full">
-      <motion.div
-        variants={{
-          hidden: { opacity: 0, y: 20 },
-          visible: { opacity: 1, y: 0 },
-        }}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        transition={{ duration: 0.6, delay, ease: "easeOut" }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-};
-
-const PropertyModal = ({ property, onClose }) => {
-  if (!property) return null;
-
-  return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 sm:p-6"
-      onClick={onClose}
-    >
-      <motion.div 
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-white w-full max-w-5xl h-fit max-h-[95vh] overflow-hidden rounded-2xl shadow-2xl flex flex-col md:flex-row relative"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-900 bg-white/80 backdrop-blur rounded-full p-2 hover:bg-zinc-100 transition-all z-[110] shadow-md"
-        >
-          <X size={20} />
-        </button>
-
-        <div className="w-full md:w-1/2 h-64 md:h-auto shrink-0 overflow-hidden bg-zinc-100">
-          <img src={property.img} className="w-full h-full object-cover" alt={property.title} />
-        </div>
-
-        <div className="w-full md:w-1/2 p-6 md:p-10 lg:p-12 overflow-y-auto flex flex-col">
-          <div className="flex items-center gap-2 text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-3">
-            <MapPin size={12} /> {property.location}
-          </div>
-          
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif text-zinc-900 mb-6 leading-[1.2] py-1">
-            {property.title}
-          </h2>
-          
-          <div className="text-zinc-500 text-sm md:text-base leading-relaxed space-y-4 mb-8 font-light flex-grow">
-            <p>{property.fullDesc}</p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6 border-t border-zinc-100 pt-6 mt-auto">
-            <div>
-              <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-bold mb-1">Investment Value</p>
-              <p className="text-xl font-serif text-zinc-900">{property.price}</p>
-            </div>
-            <div>
-              <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-bold mb-1">Availability</p>
-              <div className="flex items-center gap-2 text-green-600 font-semibold text-sm">
-                <CheckCircle2 size={14} /> Ready 2026
-              </div>
-            </div>
-          </div>
-
-          <button className="mt-10 w-full bg-zinc-900 text-white px-6 py-4 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-zinc-800 transition-all group rounded-lg shrink-0">
-            Consult with Expert <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-          </button>
-        </div>
+    <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-zinc-950 flex items-center justify-center">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-white font-display text-3xl tracking-tighter font-light italic serif">
+        Velmor<span className="text-blue-500 not-italic">.</span>
       </motion.div>
     </motion.div>
   );
@@ -145,357 +47,236 @@ const PropertyModal = ({ property, onClose }) => {
 
 const Navbar = ({ currentPage, setCurrentPage }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: 'Home', id: 'home' },
-    { name: 'Catalogue', id: 'projects' },
-    { name: 'Agency', id: 'studio' },
-    { name: 'Contact', id: 'contact' },
-  ];
-
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md py-3 shadow-sm border-b border-zinc-100' : 'bg-transparent py-5'}`}>
-      <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-        <button 
-          onClick={() => setCurrentPage('home')}
-          className="text-lg md:text-xl font-serif tracking-tighter text-zinc-900 flex items-center gap-1"
-        >
-          VELMOR<span className="text-blue-600 font-black">.</span>
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'py-3 bg-white/95 backdrop-blur-md border-b border-zinc-100' : 'py-6 md:py-8 bg-transparent'}`}>
+      <div className="max-w-6xl mx-auto px-6 md:px-10 flex justify-between items-center">
+        <button onClick={() => setCurrentPage('home')} className="text-xl md:text-2xl font-display font-medium tracking-tighter text-zinc-950 italic serif group">
+          Velmor<span className="text-blue-500 not-italic group-hover:ml-1 transition-all">.</span>
         </button>
-        
-        <div className="hidden md:flex space-x-8">
-          {navLinks.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => setCurrentPage(link.id)}
-              className={`text-[9px] uppercase tracking-[0.2em] transition-colors ${
-                currentPage === link.id ? 'text-zinc-900 font-bold' : 'text-zinc-400 hover:text-zinc-900'
-              }`}
-            >
-              {link.name}
+        <div className="flex gap-6 md:gap-10">
+          {['home', 'projects', 'studio', 'contact'].map((id) => (
+            <button key={id} onClick={() => setCurrentPage(id)} className={`text-[9px] md:text-[10px] uppercase tracking-[0.25em] font-semibold transition-all relative group ${currentPage === id ? 'text-blue-600' : 'text-zinc-400 hover:text-zinc-950'}`}>
+              {id === 'projects' ? 'Catalog' : id === 'studio' ? 'Agency' : id}
+              <motion.span className={`absolute -bottom-1 left-0 h-[1.5px] bg-blue-600 ${currentPage === id ? 'w-full' : 'w-0 group-hover:w-full'}`} />
             </button>
           ))}
         </div>
-
-        <button 
-          className="md:hidden text-zinc-900"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
       </div>
-
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="absolute top-full left-0 w-full bg-white border-b border-zinc-100 p-6 md:hidden shadow-lg overflow-hidden"
-          >
-            <div className="flex flex-col space-y-4">
-              {navLinks.map((link) => (
-                <button
-                  key={link.id}
-                  onClick={() => {
-                    setCurrentPage(link.id);
-                    setIsMenuOpen(false);
-                  }}
-                  className={`text-left text-sm font-medium tracking-wide ${currentPage === link.id ? 'text-zinc-900' : 'text-zinc-400'}`}
-                >
-                  {link.name}
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </nav>
   );
 };
 
 const HomePage = ({ setCurrentPage }) => (
-  <div className="bg-white">
-    <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0">
-        <img src={IMAGES.hero} className="w-full h-full object-cover" alt="Luxury NC Home" />
-        <div className="absolute inset-0 bg-white/20"></div>
-      </div>
-      
-      <div className="relative z-10 max-w-5xl mx-auto w-full px-6 text-center">
-        <Reveal>
-          <span className="text-zinc-900 text-[10px] font-bold uppercase tracking-[0.4em] mb-4 block">North Carolina — Est. 2026</span>
-        </Reveal>
-        <Reveal delay={0.4}>
-          <h1 className="text-4xl md:text-6xl font-serif text-zinc-900 mb-8 tracking-tight leading-[1.1]">
-            New Standard <br/> <span className="italic font-light">Future Living.</span>
-          </h1>
-        </Reveal>
-        <Reveal delay={0.6}>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button 
-              onClick={() => setCurrentPage('projects')}
-              className="w-full sm:w-auto bg-zinc-900 text-white px-8 py-3.5 uppercase tracking-widest text-[9px] font-bold hover:bg-zinc-800 transition-all flex items-center justify-center gap-3 rounded-lg"
-            >
-              View Catalogue <ArrowRight size={12} />
-            </button>
-            <button 
-              onClick={() => setCurrentPage('studio')}
-              className="w-full sm:w-auto border border-zinc-200 bg-white/50 backdrop-blur text-zinc-900 px-8 py-3.5 uppercase tracking-widest text-[9px] font-bold hover:bg-zinc-50 transition-all rounded-lg"
-            >
-              About Velmor
-            </button>
-          </div>
-        </Reveal>
+  <div className="relative">
+    <section className="h-[90vh] md:h-screen relative flex items-center justify-center overflow-hidden">
+      <motion.div initial={{ scale: 1.1 }} animate={{ scale: 1 }} transition={{ duration: 2.5, ease: "easeOut" }} className="absolute inset-0">
+        <img src={IMAGES.hero} className="w-full h-full object-cover" alt="Hero Luxury Home" />
+        <div className="absolute inset-0 bg-black/5" />
+      </motion.div>
+      <div className="relative z-10 text-center px-6">
+        <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-zinc-900 text-[9px] font-bold uppercase tracking-[0.5em] mb-6 block">North Carolina — 2026</motion.span>
+        <motion.h1 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8 }} className="text-4xl md:text-7xl lg:text-8xl font-display font-light text-zinc-950 tracking-tight leading-[1.1] mb-12 max-w-5xl mx-auto">
+          The <span className="italic serif">New</span> Definition <br className="hidden md:block"/> Of <span className="italic serif">Timeless</span> Luxury.
+        </motion.h1>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button onClick={() => setCurrentPage('projects')} className="group px-10 py-5 bg-zinc-950 text-white rounded-full text-[9px] font-bold uppercase tracking-[0.3em] hover:bg-blue-600 transition-all shadow-xl flex items-center gap-3">
+            Explore Catalog <ArrowRight size={14} />
+          </button>
+          <button onClick={() => setCurrentPage('studio')} className="px-10 py-5 bg-white/80 backdrop-blur border border-zinc-200 text-zinc-950 rounded-full text-[9px] font-bold uppercase tracking-[0.3em] hover:bg-zinc-50 transition-all">
+            About Velmor
+          </button>
+        </motion.div>
       </div>
     </section>
 
-    <section className="py-20 md:py-28 px-6 max-w-4xl mx-auto text-center">
-      <Reveal>
-        <h2 className="text-2xl md:text-3xl font-serif leading-snug text-zinc-900 mb-8">
-          Why North Carolina in 2026?
-        </h2>
-      </Reveal>
-      <Reveal delay={0.3}>
-        <p className="text-zinc-500 text-sm md:text-base leading-relaxed font-light mb-6">
-          With the rapid growth of the tech sector in Research Triangle Park and the financial expansion in Charlotte, North Carolina has become the primary intersection between suburban comfort and global career opportunities. At Velmor, we understand this demographic shift.
-        </p>
-        <p className="text-zinc-500 text-sm md:text-base leading-relaxed font-light">
-          The year 2026 marks the era of The Great Balance, where a home is no longer just a place to live, but an energy hub, an integrated private office, and a regenerative space. We curate every property with standards of sustainable technology and timeless aesthetics.
-        </p>
-      </Reveal>
+    <section className="py-24 md:py-40 px-6 md:px-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-start">
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <span className="text-blue-600 text-[9px] font-bold uppercase tracking-[0.4em] block mb-6">Ethos & Vision</span>
+        <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-light text-zinc-950 leading-tight">Inspiration in <span className="italic serif text-zinc-400">every space</span>.</h2>
+      </motion.div>
+      <div className="space-y-6 text-zinc-500 font-light text-lg md:text-xl leading-relaxed">
+        <p>We guide your transition toward a more meaningful lifestyle through precise and artistic property curation across North Carolina.</p>
+        <button onClick={() => setCurrentPage('studio')} className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-950 group border-b border-zinc-200 pb-1 w-fit">
+          Discover Our Agency <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />
+        </button>
+      </div>
     </section>
   </div>
 );
 
 const ProjectsPage = () => {
+  const [filter, setFilter] = useState('All');
   const [selected, setSelected] = useState(null);
+  const filteredData = filter === 'All' ? PROPERTY_DATA : PROPERTY_DATA.filter(p => p.category === filter);
 
   return (
-    <section className="pt-24 pb-20 px-6 bg-white min-h-screen">
+    <section className="pt-32 md:pt-40 pb-24 px-6 md:px-10 bg-white min-h-screen">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4 border-b border-zinc-100 pb-8">
+        <header className="mb-16 md:mb-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
-            <Reveal><span className="text-zinc-400 uppercase tracking-widest text-[9px] mb-2 block font-bold">Exclusive Portfolio</span></Reveal>
-            <Reveal delay={0.3}><h1 className="text-3xl md:text-4xl font-serif text-zinc-900">2026 Property Curation</h1></Reveal>
+            <span className="text-zinc-400 uppercase tracking-[0.3em] text-[9px] font-bold mb-3 block">Portfolio</span>
+            <h2 className="text-4xl md:text-6xl font-display font-light text-zinc-950 italic serif">Property Catalog</h2>
           </div>
-          <div className="flex items-center gap-2 text-zinc-400 text-[10px] uppercase tracking-wider">
-            <Calendar size={14} /> Last updated: March 2026
+          <div className="flex flex-wrap gap-2">
+            {['All', 'Residential', 'Commercial', 'Land'].map((cat) => (
+              <button key={cat} onClick={() => setFilter(cat)} className={`px-6 py-3 rounded-full text-[9px] uppercase tracking-widest font-bold border transition-all ${filter === cat ? 'bg-zinc-950 text-white border-zinc-950 shadow-lg' : 'bg-transparent text-zinc-400 border-zinc-100 hover:border-zinc-200'}`}>
+                {cat}
+              </button>
+            ))}
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
-          {PROPERTY_DATA.map((p) => (
-            <motion.div 
-              key={p.id} 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              onClick={() => setSelected(p)}
-              className="group cursor-pointer"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden bg-zinc-50 mb-4 rounded-xl shadow-sm">
-                <motion.img 
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                  src={p.img} 
-                  className="w-full h-full object-cover transition-all"
-                />
-                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur px-3 py-1.5 text-[9px] font-bold tracking-widest uppercase shadow-sm rounded-lg">
-                  Starting {p.price}
+        </header>
+        
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-16 md:gap-y-20">
+          <AnimatePresence mode="popLayout">
+            {filteredData.map((p) => (
+              <motion.div 
+                layout key={p.id} initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.6 }}
+                className="group cursor-pointer" onClick={() => setSelected(p)}
+              >
+                <div className="relative aspect-[16/10] rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden mb-6 shadow-sm bg-zinc-100">
+                  <motion.img src={p.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt={p.title} />
+                  <div className="absolute inset-0 bg-zinc-950/0 group-hover:bg-zinc-950/20 transition-colors duration-500" />
                 </div>
-              </div>
-              <div className="flex justify-between items-start px-1">
-                <div>
-                  <h3 className="text-lg md:text-xl font-serif text-zinc-900 group-hover:text-blue-600 transition-colors">{p.title}</h3>
-                  <div className="flex items-center gap-1 text-zinc-400 text-[10px] uppercase tracking-widest mt-1">
-                    <MapPin size={10} /> {p.location}
+                <div className="flex justify-between items-start px-2">
+                  <div className="space-y-1">
+                    <p className="text-[9px] font-bold text-blue-600 uppercase tracking-widest">{p.location}</p>
+                    <h3 className="text-2xl md:text-3xl font-display font-light text-zinc-950 italic serif group-hover:not-italic transition-all duration-500">{p.title}</h3>
+                    <p className="text-lg md:text-xl font-display text-zinc-400 font-light">{p.price}</p>
+                  </div>
+                  <div className="w-10 h-10 md:w-12 md:h-12 border border-zinc-100 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                    <ArrowUpRight size={18} strokeWidth={1.5} />
                   </div>
                 </div>
-                <div className="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center group-hover:bg-zinc-900 group-hover:text-white transition-all">
-                  <Plus size={14} />
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
       <AnimatePresence>
-        {selected && <PropertyModal property={selected} onClose={() => setSelected(null)} />}
+        {selected && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-zinc-950/90 backdrop-blur-md p-4" onClick={() => setSelected(null)}>
+            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 50, opacity: 0 }} className="bg-white w-full max-w-5xl max-h-[85vh] rounded-[3rem] overflow-hidden flex flex-col md:flex-row relative" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setSelected(null)} className="absolute top-6 right-6 z-30 p-3 bg-zinc-950 text-white rounded-full hover:bg-blue-600 transition-all"><X size={18} /></button>
+              <div className="w-full md:w-1/2 h-56 md:h-auto"><img src={selected.img} className="w-full h-full object-cover" alt="" /></div>
+              <div className="w-full md:w-1/2 p-10 md:p-14 flex flex-col overflow-y-auto">
+                <span className="text-blue-600 text-[10px] font-bold uppercase tracking-widest mb-4">{selected.category}</span>
+                <h2 className="text-4xl font-display font-light text-zinc-950 mb-6 italic serif">{selected.title}</h2>
+                <p className="text-zinc-500 font-light text-lg leading-relaxed mb-10">{selected.fullDesc}</p>
+                <div className="pt-8 flex items-center justify-between border-t border-zinc-100 mt-auto">
+                  <p className="text-3xl font-display font-light">{selected.price}</p>
+                  <button className="bg-blue-600 text-white px-8 py-4 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-zinc-950 transition-colors">Inquiry</button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </section>
   );
 };
 
-const StudioPage = () => (
-  <section className="pt-24 pb-20 px-6 bg-zinc-50 min-h-screen">
-    <div className="max-w-6xl mx-auto px-4 md:px-0">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-2xl mx-auto aspect-[16/10] rounded-2xl overflow-hidden shadow-2xl relative"
-        >
-          <img src={IMAGES.agency} className="w-full h-full object-cover" alt="Velmor Office" />
-          <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl"></div>
-        </motion.div>
-        
-        <div className="max-w-xl">
-          <Reveal><span className="text-blue-600 uppercase tracking-widest text-[9px] font-bold mb-3 block">Agency Profile</span></Reveal>
-          <Reveal delay={0.2}><h1 className="text-3xl md:text-4xl font-serif text-zinc-900 mb-6 leading-tight">Velmor Agency: <br/> Navigating the NC Property Market.</h1></Reveal>
-          <div className="space-y-4 text-zinc-600 text-sm md:text-base font-light leading-relaxed">
-            <p>Since 2020, Velmor has transformed from a local property boutique into a leading consulting agency in North Carolina. We focus on properties that combine visual luxury with technical functionality.</p>
-            <p>Our team consists of real estate market experts, sustainability data analysts, and interior curators dedicated to providing a turn key experience for every client.</p>
-            <p>In this year of 2026, we are proud to have helped over 500 families find the place they call the Home of the Future.</p>
+const StudioPage = () => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref });
+  const y = useTransform(scrollYProgress, [0, 1], [0, -60]);
+
+  return (
+    <section ref={ref} className="py-24 md:py-40 px-6 md:px-10 bg-zinc-50 overflow-hidden">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16 md:gap-24">
+        <div className="w-full lg:w-1/2 relative">
+          <motion.div style={{ borderRadius: "10rem 2rem 10rem 2rem" }} className="aspect-[3/2] overflow-hidden shadow-xl relative bg-zinc-200">
+            <motion.img src={IMAGES.agency} style={{ y }} className="w-full h-full object-cover scale-110" alt="Agency Color" />
+          </motion.div>
+          <div className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 bg-white p-8 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] shadow-xl border border-zinc-100 hidden sm:block">
+            <p className="text-5xl md:text-6xl font-display font-light italic serif leading-none mb-1">98%</p>
+            <p className="text-[9px] uppercase font-bold text-zinc-400 tracking-widest">Satisfaction Rate</p>
           </div>
-          
-          <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-zinc-200">
-            <div>
-              <h4 className="text-xl font-serif text-zinc-900">20+</h4>
-              <p className="text-[7px] uppercase text-zinc-400 tracking-widest font-black mt-1">Exclusive Properties</p>
-            </div>
-            <div>
-              <h4 className="text-xl font-serif text-zinc-900">$200M+</h4>
-              <p className="text-[7px] uppercase text-zinc-400 tracking-widest font-black mt-1">Total Sales</p>
-            </div>
-            <div>
-              <h4 className="text-xl font-serif text-zinc-900">Charlotte</h4>
-              <p className="text-[7px] uppercase text-zinc-400 tracking-widest font-black mt-1">Headquarters</p>
-            </div>
+        </div>
+        <div className="w-full lg:w-1/2 space-y-8 md:space-y-10">
+          <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.4em]">Our Agency</span>
+          <h2 className="text-4xl md:text-6xl font-display font-light leading-tight italic serif text-zinc-950">Visions <span className="not-italic">Beyond Borders</span>.</h2>
+          <p className="text-zinc-500 text-lg md:text-xl font-light leading-relaxed">
+            Velmor combines global data analytics with a personal touch to ensure every property is a strategic lifestyle investment.
+          </p>
+          <div className="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-200">
+            <div><p className="font-display text-2xl mb-1 italic serif">Curation</p><p className="text-sm text-zinc-400 font-light">Strict selection standards.</p></div>
+            <div><p className="font-display text-2xl mb-1 italic serif">Privacy</p><p className="text-sm text-zinc-400 font-light">Absolute confidentiality.</p></div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const ContactPage = () => (
-  <section className="pt-24 pb-20 px-6 bg-white min-h-screen">
-    <div className="max-w-5xl mx-auto">
-      <div className="flex flex-col lg:flex-row gap-12">
-        <div className="lg:w-2/5">
-          <Reveal><h1 className="text-4xl font-serif text-zinc-900 mb-8 tracking-tight">Start Your Consultation.</h1></Reveal>
-          <div className="space-y-8">
-            <div className="flex gap-4 items-start">
-              <div className="p-2 bg-zinc-50 rounded-lg"><Phone className="text-zinc-400" size={16} /></div>
-              <div>
-                <h4 className="text-[8px] uppercase tracking-widest text-zinc-400 font-black mb-1">WhatsApp Office</h4>
-                <p className="text-lg text-zinc-900">+1 (704) 563-4532</p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="p-2 bg-zinc-50 rounded-lg"><MapPin className="text-zinc-400" size={16} /></div>
-              <div>
-                <h4 className="text-[8px] uppercase tracking-widest text-zinc-400 font-black mb-1">Our Location</h4>
-                <p className="text-sm text-zinc-900 leading-relaxed font-light">302 South Tryon Street, <br/>Charlotte, NC 28320</p>
-              </div>
-            </div>
-            <div className="flex gap-4">
-              <Instagram size={18} className="text-zinc-300 hover:text-zinc-900 transition-colors cursor-pointer" />
-              <Linkedin size={18} className="text-zinc-300 hover:text-zinc-900 transition-colors cursor-pointer" />
-            </div>
-          </div>
+  <section className="py-32 md:py-40 px-6 md:px-10 bg-white min-h-[80vh] flex items-center">
+    <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24">
+      <div className="flex flex-col justify-center">
+        <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 block">Contact Us</span>
+        <h2 className="text-4xl md:text-7xl font-display font-light tracking-tighter leading-tight mb-12 italic serif text-zinc-950">Bring Your <span className="not-italic">Destination</span> To Life.</h2>
+        <div className="space-y-10">
+          <div><p className="text-[9px] uppercase text-zinc-400 font-bold tracking-widest mb-2">Address</p><p className="text-xl md:text-2xl font-display font-light text-zinc-950 italic serif">Charlotte, NC 28202</p></div>
+          <div><p className="text-[9px] uppercase text-zinc-400 font-bold tracking-widest mb-2">Email</p><p className="text-xl md:text-2xl font-display font-light text-blue-600 border-b border-zinc-100 inline-block pb-1">hello@velmor.nc</p></div>
         </div>
-        
-        <div className="lg:w-3/5 bg-zinc-900 p-8 rounded-2xl shadow-xl">
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-[7px] uppercase font-black text-zinc-500 tracking-widest">Full Name</label>
-                <input type="text" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm" placeholder="John Doe" />
-              </div>
-              <div className="space-y-2">
-                <label className="text-[7px] uppercase font-black text-zinc-500 tracking-widest">Email Address</label>
-                <input type="email" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm" placeholder="john@example.com" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label className="text-[7px] uppercase font-black text-zinc-500 tracking-widest">Message / Specific Interests</label>
-              <textarea rows="3" className="w-full bg-zinc-800/50 border border-zinc-800 rounded-lg py-2.5 px-4 text-white focus:outline-none focus:border-zinc-600 transition-all text-sm resize-none" placeholder="Tell us about the property type you are looking for..."></textarea>
-            </div>
-            <button className="w-full flex items-center justify-center bg-white text-zinc-900 px-6 py-3.5 font-bold uppercase tracking-widest text-[9px] hover:bg-zinc-200 transition-colors gap-3 rounded-lg">
-              Send Consultation Schedule <ArrowRight size={12} />
-            </button>
-          </form>
-        </div>
+      </div>
+      <div className="bg-zinc-50 p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] border border-zinc-100 shadow-sm">
+        <form className="space-y-10" onSubmit={e => e.preventDefault()}>
+          {['Name', 'Subject', 'Email'].map((f) => (
+            <input key={f} type="text" className="w-full bg-transparent border-b border-zinc-200 py-4 text-xl font-light focus:outline-none focus:border-blue-600 transition-all placeholder:text-zinc-300" placeholder={f} />
+          ))}
+          <button className="w-full py-5 rounded-full bg-zinc-950 text-white text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-blue-600 transition-all shadow-lg">Submit</button>
+        </form>
       </div>
     </div>
   </section>
-);
-
-const Footer = () => (
-  <footer className="bg-white border-t border-zinc-100 py-12 px-6">
-    <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-      <div className="text-center md:text-left">
-        <span className="text-lg font-serif tracking-tighter text-zinc-900 italic">Velmor Agency.</span>
-        <p className="text-[8px] text-zinc-400 tracking-widest uppercase mt-1">North Carolina Premier Real Estate</p>
-      </div>
-      <div className="text-zinc-300 text-[10px] tracking-widest uppercase font-medium">
-        © 2026 Velmor Agency - Member of NC Realtor Association
-      </div>
-    </div>
-  </footer>
 );
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
+  const [isLoading, setIsLoading] = useState(true);
+  const lenisRef = useRef(null);
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     const script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js";
     script.async = true;
     script.onload = () => {
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
+      const lenis = new Lenis({ 
+        duration: 1.2, 
         smoothWheel: true,
         wheelMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
+        touchMultiplier: 2
       });
-
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
+      lenisRef.current = lenis;
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
       requestAnimationFrame(raf);
     };
     document.head.appendChild(script);
-
-    return () => {
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
   }, []);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentPage]);
-
   return (
-    <div className="bg-white selection:bg-zinc-900 selection:text-white antialiased font-sans">
+    <div className="bg-white selection:bg-blue-600 selection:text-white antialiased font-sans text-zinc-950 overflow-x-hidden">
+      <AnimatePresence mode="wait">
+        {isLoading && <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
       <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      
-      <main className="min-h-screen">
+      <main className="overflow-x-hidden">
         <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-          >
+          <motion.div key={currentPage} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
             {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
             {currentPage === 'projects' && <ProjectsPage />}
             {currentPage === 'studio' && <StudioPage />}
@@ -503,29 +284,22 @@ export default function App() {
           </motion.div>
         </AnimatePresence>
       </main>
-
-      <Footer />
-
+      <footer className="bg-white py-20 px-6 md:px-10 border-t border-zinc-100">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 text-zinc-400">
+          <div className="max-w-xs space-y-4">
+            <h4 className="font-display font-medium text-zinc-950 text-2xl italic serif text-zinc-950">Velmor<span className="text-blue-600 not-italic">.</span></h4>
+            <p className="text-xs font-light">The new standard for North Carolina real estate.</p>
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">© 2026 Velmor Agency. All rights reserved.</p>
+        </div>
+      </footer>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:italic@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;800&display=swap');
-        
-        html.lenis { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
-        .lenis.lenis-scrolling iframe { pointer-events: none; }
-
-        .font-serif { font-family: 'Instrument Serif', serif; }
-        .font-sans { font-family: 'Plus Jakarta Sans', sans-serif; }
-
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #fdfdfd; }
-        ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
-
-        @media (max-width: 640px) {
-          .text-4xl { font-size: 2.1rem !important; }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&family=Inter:wght@300;400;600&display=swap');
+        .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .serif { font-family: 'Cormorant Garamond', serif; }
+        ::-webkit-scrollbar { width: 0px; }
+        body { width: 100vw; overflow-x: hidden; scroll-behavior: auto !important; }
       `}</style>
     </div>
   );
