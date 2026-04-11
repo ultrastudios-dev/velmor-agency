@@ -25,9 +25,7 @@ const PROPERTY_DATA = [
   { id: 3, category: 'Commercial', title: "Triangle Tech Hub", price: "$12,500,000", img: IMAGES.commercial1, location: "Durham, NC", fullDesc: "Grade A LEED Platinum complex featuring rooftop lounges and cutting-edge technology facilities." },
   { id: 4, category: 'Commercial', title: "The Meridian Office", price: "$8,200,000", img: IMAGES.commercial2, location: "Charlotte, NC", fullDesc: "Modular office spaces in the prime business district with 360-degree city skyline views." },
   { id: 5, category: 'Land', title: "Blue Ridge Sanctuary", price: "$3,100,000", img: IMAGES.land1, location: "Asheville, NC", fullDesc: "25 acres of exclusive mountain slope land, ideal for luxury resorts or private estates." },
-  { id: 6, category: 'Land', title: "Coastal Horizon Lot", price: "$2,720,000", img: IMAGES.land2, location: "Wilmington, NC", fullDesc: "Prime beachfront lot in Wrightsville Beach with permits for an exclusive waterfront residential development." },
-  { id: 7, category: 'Residential', title: "Asheville Cloud Retreat", price: "$3,100,000", img: IMAGES.project3, location: "Asheville, NC", fullDesc: "Sustainable living crafted from local natural materials with dramatic mountain vistas." },
-  { id: 8, category: 'Residential', title: "Wilmington Azure View", price: "$2,720,000", img: IMAGES.project4, location: "Wilmington, NC", fullDesc: "Coastal luxury featuring expansive sun decks and private dock access for a maritime lifestyle." }
+  { id: 6, category: 'Land', title: "Coastal Horizon Lot", price: "$2,720,000", img: IMAGES.land2, location: "Wilmington, NC", fullDesc: "Prime beachfront lot in Wrightsville Beach with permits for an exclusive waterfront residential development." }
 ];
 
 const LoadingScreen = ({ onComplete }) => {
@@ -49,7 +47,7 @@ const Navbar = ({ currentPage, setCurrentPage }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -205,10 +203,6 @@ const StudioPage = () => {
           <p className="text-zinc-500 text-lg md:text-xl font-light leading-relaxed">
             Velmor combines global data analytics with a personal touch to ensure every property is a strategic lifestyle investment.
           </p>
-          <div className="grid grid-cols-2 gap-8 pt-8 border-t border-zinc-200">
-            <div><p className="font-display text-2xl mb-1 italic serif">Curation</p><p className="text-sm text-zinc-400 font-light">Strict selection standards.</p></div>
-            <div><p className="font-display text-2xl mb-1 italic serif">Privacy</p><p className="text-sm text-zinc-400 font-light">Absolute confidentiality.</p></div>
-          </div>
         </div>
       </div>
     </section>
@@ -221,10 +215,6 @@ const ContactPage = () => (
       <div className="flex flex-col justify-center">
         <span className="text-blue-600 text-[10px] font-bold uppercase tracking-[0.4em] mb-8 block">Contact Us</span>
         <h2 className="text-4xl md:text-7xl font-display font-light tracking-tighter leading-tight mb-12 italic serif text-zinc-950">Bring Your <span className="not-italic">Destination</span> To Life.</h2>
-        <div className="space-y-10">
-          <div><p className="text-[9px] uppercase text-zinc-400 font-bold tracking-widest mb-2">Address</p><p className="text-xl md:text-2xl font-display font-light text-zinc-950 italic serif">Charlotte, NC 28202</p></div>
-          <div><p className="text-[9px] uppercase text-zinc-400 font-bold tracking-widest mb-2">Email</p><p className="text-xl md:text-2xl font-display font-light text-blue-600 border-b border-zinc-100 inline-block pb-1">hello@velmor.nc</p></div>
-        </div>
       </div>
       <div className="bg-zinc-50 p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] border border-zinc-100 shadow-sm">
         <form className="space-y-10" onSubmit={e => e.preventDefault()}>
@@ -243,8 +233,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const lenisRef = useRef(null);
 
-  useLayoutEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
     }
@@ -255,28 +245,57 @@ export default function App() {
     script.src = "https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js";
     script.async = true;
     script.onload = () => {
-      const lenis = new Lenis({ 
-        duration: 1.2, 
-        smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 2
-      });
-      lenisRef.current = lenis;
-      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-      requestAnimationFrame(raf);
+      
+      setTimeout(() => {
+        try {
+          const lenis = new Lenis({ 
+            duration: 1.2, 
+            smoothWheel: true,
+            wheelMultiplier: 1,
+            touchMultiplier: 2,
+            infinite: false,
+          });
+
+          lenisRef.current = lenis;
+          
+          function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+          }
+          requestAnimationFrame(raf);
+          
+          // Memastikan body bisa di-scroll
+          document.body.style.overflow = 'auto';
+          document.documentElement.style.overflow = 'auto';
+        } catch (e) {
+          console.error("Lenis init failed, falling back to native scroll", e);
+        }
+      }, 100);
     };
     document.head.appendChild(script);
+
+    return () => {
+      if (lenisRef.current) lenisRef.current.destroy();
+    };
   }, []);
 
   return (
-    <div className="bg-white selection:bg-blue-600 selection:text-white antialiased font-sans text-zinc-950 overflow-x-hidden">
+    <div className="bg-white selection:bg-blue-600 selection:text-white antialiased font-sans text-zinc-950 min-h-screen">
       <AnimatePresence mode="wait">
         {isLoading && <LoadingScreen key="loader" onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
+      
       <Navbar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <main className="overflow-x-hidden">
+      
+      <main className="relative z-10">
         <AnimatePresence mode="wait">
-          <motion.div key={currentPage} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+          <motion.div 
+            key={currentPage} 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: -10 }} 
+            transition={{ duration: 0.4 }}
+          >
             {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
             {currentPage === 'projects' && <ProjectsPage />}
             {currentPage === 'studio' && <StudioPage />}
@@ -284,22 +303,47 @@ export default function App() {
           </motion.div>
         </AnimatePresence>
       </main>
-      <footer className="bg-white py-20 px-6 md:px-10 border-t border-zinc-100">
+
+      <footer className="bg-white py-20 px-6 md:px-10 border-t border-zinc-100 relative z-10">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 text-zinc-400">
           <div className="max-w-xs space-y-4">
-            <h4 className="font-display font-medium text-zinc-950 text-2xl italic serif text-zinc-950">Velmor<span className="text-blue-600 not-italic">.</span></h4>
-            <p className="text-xs font-light">The new standard for North Carolina real estate.</p>
+            <h4 className="font-display font-medium text-zinc-950 text-2xl italic serif">Velmor<span className="text-blue-600 not-italic">.</span></h4>
+            <p className="text-xs font-light">Elevating North Carolina's luxury living standards.</p>
           </div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">© 2026 Velmor Agency. All rights reserved.</p>
         </div>
       </footer>
+
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,500&family=Inter:wght@300;400;600&display=swap');
+        
+        :root {
+          --scroll-behavior: auto !important;
+        }
+
+        html, body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          min-height: 100%;
+          overflow-x: hidden;
+          background-color: white;
+          -webkit-font-smoothing: antialiased;
+        }
+        
+        body {
+          overflow-y: auto !important;
+          height: auto !important;
+          position: relative !important;
+        }
+
         .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
         .font-sans { font-family: 'Inter', sans-serif; }
         .serif { font-family: 'Cormorant Garamond', serif; }
-        ::-webkit-scrollbar { width: 0px; }
-        body { width: 100vw; overflow-x: hidden; scroll-behavior: auto !important; }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e4e4e7; border-radius: 10px; }
       `}</style>
     </div>
   );
