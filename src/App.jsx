@@ -108,11 +108,13 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [inquirySent, setInquirySent] = useState(false);
 
+  // Planner States
   const [propertyValue, setPropertyValue] = useState(2450000);
   const [appreciation, setAppreciation] = useState(7);
   const [years, setYears] = useState(10);
   const [futureValue, setFutureValue] = useState(0);
 
+  // FIX: Scroll to top on page change
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [activePage]);
@@ -123,6 +125,7 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Update Future Value Calculation
   useEffect(() => {
     const val = propertyValue * Math.pow(1 + (appreciation / 100), years);
     setFutureValue(val);
@@ -158,6 +161,7 @@ export default function App() {
   return (
     <div className="bg-white min-h-screen font-sans text-zinc-900 selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden">
       
+      {/* Navbar */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled || activePage !== 'home' ? 'bg-white/95 backdrop-blur-xl py-4 shadow-sm' : 'bg-transparent py-8'}`}>
         <div className="max-w-[1400px] mx-auto px-6 flex justify-between items-center">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setPage('home')}>
@@ -190,6 +194,7 @@ export default function App() {
         </div>
       </nav>
 
+      {/* Mobile Menu */}
       <div className={`fixed inset-0 bg-zinc-950 z-[200] transition-all duration-700 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-8 flex justify-between items-center border-b border-white/5">
           <div className="flex items-center gap-3 text-white">
@@ -243,7 +248,7 @@ export default function App() {
                   <h2 className="text-4xl md:text-6xl font-serif italic mb-10 leading-tight">Beyond Real Estate. <br/> A Curated Lifestyle.</h2>
                   <div className="space-y-6 text-zinc-500 leading-relaxed font-light text-lg">
                     <p>Founded in 2020 and evolving into a North Carolina powerhouse by 2026, Velmor represents the intersection of technology, luxury, and privacy.</p>
-                    <p>We specialize in bio adaptive homes and corporate monoliths that prioritize environmental harmony without compromising the opulence of modern living.</p>
+                    <p>We specialize in bio-adaptive homes and corporate monoliths that prioritize environmental harmony without compromising the opulence of modern living.</p>
                   </div>
                 </div>
               </div>
@@ -296,6 +301,7 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+              {/* Controls */}
               <div className="lg:col-span-5 space-y-10 bg-zinc-50 p-10 md:p-12 rounded-[3rem] border border-zinc-100 shadow-sm">
                 <div className="space-y-4">
                   <div className="flex justify-between items-end">
@@ -340,6 +346,7 @@ export default function App() {
                 </div>
               </div>
 
+              {/* Results Visualization */}
               <div className="lg:col-span-7 h-full flex flex-col justify-center">
                 <div className="relative p-12 bg-white rounded-[3rem] border border-zinc-100 shadow-2xl overflow-hidden group">
                   <div className="absolute top-0 right-0 p-8 text-zinc-50 opacity-10 pointer-events-none">
@@ -405,8 +412,9 @@ export default function App() {
                 </div>
              </div>
           </section>
-        ))}
+        )}
 
+        {/* Legal Pages */}
         {activePage === 'terms' && renderLegal("Terms of Service", (
           <>
             <p>By using the Velmor website and services, you agree to comply with our professional conduct standards. Our listings are exclusive and require verification before disclosure of sensitive architectural data.</p>
@@ -424,6 +432,7 @@ export default function App() {
         ))}
       </main>
 
+      {/* Property Modal */}
       {selectedItem && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-zinc-950/95 backdrop-blur-md" onClick={() => setSelectedItem(null)} />
@@ -482,6 +491,7 @@ export default function App() {
         </div>
       )}
 
+      {/* Footer */}
       <footer className="bg-zinc-950 text-white pt-24 pb-8 px-6">
         <div className="max-w-[1400px] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
@@ -490,7 +500,7 @@ export default function App() {
                 <VelmorLogo className="w-8 h-8" light />
                 <span className="text-xl font-serif italic tracking-widest">VELMOR</span>
               </div>
-              <p className="text-white/30 text-sm italic max-w-xs leading-relaxed">Curating high value assets for the modern era. Defining the North Carolina architectural skyline since 2020.</p>
+              <p className="text-white/30 text-sm italic max-w-xs leading-relaxed">Curating high-value assets for the modern era. Defining the North Carolina architectural skyline since 2020.</p>
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-widest text-white/20 font-bold mb-6">Explore</p>
