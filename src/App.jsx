@@ -518,7 +518,7 @@ export default function App() {
                 <span className="text-xl font-serif italic tracking-widest">VELMOR</span>
               </div>
               <p className="text-white/30 text-sm italic max-w-xs leading-relaxed font-light">
-                Curating high-value assets for the modern era. <br/>
+                Curating high value assets for the modern era. <br/>
                 Defining the North Carolina architectural skyline since 2020.
               </p>
             </div>
