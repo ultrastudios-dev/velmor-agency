@@ -405,7 +405,7 @@ export default function App() {
                 </div>
              </div>
           </section>
-        )}
+      }
 
         {activePage === 'terms' && renderLegal("Terms of Service", (
           <>
