@@ -405,7 +405,7 @@ export default function App() {
                 </div>
              </div>
           </section>
-      }
+      )}
 
         {activePage === 'terms' && renderLegal("Terms of Service", (
           <>
@@ -448,6 +448,7 @@ export default function App() {
                     alt={`Thumbnail ${i}`} 
                   />
                 ))}
+                
               </div>
             </div>
 
