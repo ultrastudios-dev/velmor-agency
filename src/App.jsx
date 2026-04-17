@@ -70,7 +70,7 @@ const PROPERTY_DATA = [
     location: "Durham, NC", 
     area: "25,000 sqft", 
     rooms: "15 Suites",
-    desc: "A state-of-the-art corporate HQ designed with bio-adaptive lighting and modular floor plans." 
+    desc: "A state of the art corporate HQ designed with bio-adaptive lighting and modular floor plans." 
   },
   { 
     id: 4, 
@@ -87,7 +87,7 @@ const PROPERTY_DATA = [
     location: "Asheville, NC", 
     area: "12 Acres", 
     rooms: "Unbuilt",
-    desc: "Prime elevated acreage with panoramic views of the Blue Ridge Mountains. Pre-permitted for a luxury villa." 
+    desc: "Prime elevated acreage with panoramic views of the Blue Ridge Mountains. Pre permitted for a luxury villa." 
   }
 ];
 
@@ -244,7 +244,7 @@ export default function App() {
                   </div>
                   <div className="absolute -bottom-10 -right-10 bg-white p-10 rounded-3xl shadow-xl hidden md:block max-w-xs border border-zinc-100 animate-bounce-subtle">
                     <p className="text-emerald-600 font-bold mb-2">Verified Authority</p>
-                    <p className="text-xs text-zinc-400 leading-relaxed italic">"Velmor doesn't just list properties; we curate legacies for the next generation."</p>
+                    <p className="text-xs text-zinc-400 leading-relaxed italic">"Velmor doesn't just list properties. we curate legacies for the next generation."</p>
                   </div>
                 </div>
                 <div>
@@ -252,7 +252,7 @@ export default function App() {
                   <h2 className="text-4xl md:text-6xl font-serif italic mb-10 leading-tight">Beyond Real Estate. <br/> A Curated Lifestyle.</h2>
                   <div className="space-y-6 text-zinc-500 leading-relaxed font-light text-lg">
                     <p>Founded in 2020 and evolving into a North Carolina powerhouse by 2026, Velmor represents the intersection of technology, luxury, and privacy.</p>
-                    <p>We specialize in bio-adaptive homes and corporate monoliths that prioritize environmental harmony without compromising the opulence of modern living.</p>
+                    <p>We specialize in bio adaptive homes and corporate monoliths that prioritize environmental harmony without compromising the opulence of modern living.</p>
                   </div>
                 </div>
               </div>
@@ -439,7 +439,7 @@ export default function App() {
         {activePage === 'privacy' && renderLegal("Privacy & Cookies", (
           <>
             <p>Your privacy is our priority. We utilize end-to-end encryption for all dossier requests. We do not sell your personal data to third-party marketing firms.</p>
-            <p><strong>Cookies:</strong> We use essential cookies to maintain your session security and preference cookies to store your property wishlist. No tracking cookies are used for off-site profiling.</p>
+            <p><strong>Cookies:</strong> We use essential cookies to maintain your session security and preference cookies to store your property wishlist. No tracking cookies are used for off site profiling.</p>
             <p><strong>Security:</strong> All financial discussions are conducted via secure, private channels. We comply with NC state regulations regarding real estate data protection.</p>
           </>
         ))}
