@@ -372,7 +372,7 @@ export default function App() {
               </div>
             </div>
           </section>
-        )}
+        ))}
 
         {activePage === 'contact' && (
           <section className="pt-40 pb-40 px-6 max-w-[1400px] mx-auto min-h-screen">
