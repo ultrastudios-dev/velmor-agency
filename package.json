@@ -1,8 +1,7 @@
 {
-  "name": "velmor-agency-2026",
+  "name": "velmor-agency",
   "private": true,
-  "version": "1.0.0",
-  "description": "High-end property agency portfolio",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
