@@ -1,215 +1,222 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  ArrowUpRight, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  X,
-  Menu,
-  ChevronRight,
-  CheckCircle,
-  Heart,
-  Clock,
-  ShieldCheck,
-  Maximize2,
-  ExternalLink,
-  ArrowLeft,
-  TrendingUp,
-  Wallet,
-  BarChart3,
-  ShieldAlert
+import React, { useState, useEffect, useMemo } from 'react';
+import {
+  ArrowUpRight, MapPin, X, Menu, Building2, Search,
+  Linkedin, Mail, Globe, Clock, Send, Phone, MessageSquare
 } from 'lucide-react';
 
 const PROPERTY_DATA = [
-  { 
-    id: 1, 
-    category: 'Residential', 
-    title: "The Zenith Canopy", 
-    price: "$2,450,000", 
-    numericPrice: 2450000,
-    img: "https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800", 
+  {
+    id: 1, category: 'Residential', badge: 'Featured',
+    title: "The Zenith Canopy", price: "$2,450,000",
+    img: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
     gallery: [
-      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=800"
+      "https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
-    location: "Charlotte, NC", 
-    area: "4,200 sqft", 
-    rooms: "4 Beds / 5 Baths",
-    desc: "A masterpiece of modern concrete and glass architecture. Features a living roof and private wellness wing." 
+    location: "Charlotte, NC", details: "4 BR / 5 BA",
+    desc: "A contemporary masterpiece blending glass architecture with sustainable living.",
   },
-  { 
-    id: 2, 
-    category: 'Residential', 
-    title: "Obsidian Glass House", 
-    price: "$1,890,000", 
-    numericPrice: 1890000,
-    img: "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=800", 
+  {
+    id: 2, category: 'Residential', badge: 'New',
+    title: "Obsidian Glass House", price: "$1,890,000",
+    img: "https://images.pexels.com/photos/1438832/pexels-photo-1438832.jpeg?auto=compress&cs=tinysrgb&w=800",
     gallery: [
-      "https://images.pexels.com/photos/1438834/pexels-photo-1438834.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/312407/pexels-photo-312407.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/534151/pexels-photo-534151.jpeg?auto=compress&cs=tinysrgb&w=800"
+      "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
-    location: "Raleigh, NC", 
-    area: "3,100 sqft", 
-    rooms: "3 Beds / 3 Baths",
-    desc: "Minimalist living with gold layered privacy glass. The structure blends seamlessly into the surrounding pine forest." 
+    location: "Raleigh, NC", details: "3 BR / 3 BA",
+    desc: "Minimalist lines and total privacy in the heart of nature.",
   },
-  { 
-    id: 3, 
-    category: 'Commercial', 
-    title: "The Monolith Center", 
-    price: "$12,500,000", 
-    numericPrice: 12500000,
-    img: "https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800", 
+  {
+    id: 3, category: 'Commercial', badge: 'Premier',
+    title: "The Monolith Center", price: "$12,500,000",
+    img: "https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800",
     gallery: [
-      "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/1170412/pexels-photo-1170412.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/3182811/pexels-photo-3182811.jpeg?auto=compress&cs=tinysrgb&w=800"
+      "https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
-    location: "Durham, NC", 
-    area: "25,000 sqft", 
-    rooms: "15 Suites",
-    desc: "A state of the art corporate HQ designed with bio-adaptive lighting and modular floor plans." 
+    location: "Durham, NC", details: "25,000 Sqft",
+    desc: "A beacon of modern commerce with LEED certified efficiency.",
   },
-  { 
-    id: 4, 
-    category: 'Land', 
-    title: "Emerald Ridge Estate", 
-    price: "$950,000", 
-    numericPrice: 950000,
-    img: "https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&cs=tinysrgb&w=800", 
+  {
+    id: 4, category: 'Residential', badge: 'Limited',
+    title: "Marble Haven", price: "$4,200,000",
+    img: "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=800",
     gallery: [
-      "https://images.pexels.com/photos/460695/pexels-photo-460695.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/210158/pexels-photo-210158.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/247599/pexels-photo-247599.jpeg?auto=compress&cs=tinysrgb&w=800"
+      "https://images.pexels.com/photos/2724748/pexels-photo-2724748.jpeg?auto=compress&cs=tinysrgb&w=800"
     ],
-    location: "Asheville, NC", 
-    area: "12 Acres", 
-    rooms: "Unbuilt",
-    desc: "Prime elevated acreage with panoramic views of the Blue Ridge Mountains. Pre permitted for a luxury villa." 
+    location: "Asheville, NC", details: "5 BR / 6 BA",
+    desc: "Classic charm met with futuristic automation and panoramic views.",
+  },
+  {
+    id: 5, category: 'Commercial', badge: 'High-End',
+    title: "Urban Nexus", price: "$9,700,000",
+    img: "https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=800",
+    gallery: [
+      "https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
+    location: "Charlotte, NC", details: "Suite A-Z",
+    desc: "The ultimate corporate playground designed for creative titans.",
+  },
+  {
+    id: 6, category: 'Residential', badge: 'Luxury',
+    title: "The Ivory Villa", price: "$3,100,000",
+    img: "https://images.pexels.com/photos/1838554/pexels-photo-1838554.jpeg?auto=compress&cs=tinysrgb&w=800",
+    gallery: [
+      "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=800"
+    ],
+    location: "Pinehurst, NC", details: "4 BR / 4 BA",
+    desc: "A serene escape with high ceilings and custom lighting design.",
   }
 ];
 
-const VelmorLogo = ({ className = "w-8 h-8", light = false }) => (
-  <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="10" width="80" height="80" stroke={light ? "white" : "#10b981"} strokeWidth="2" opacity="0.3" />
-    <path d="M50 15L85 30V70L50 85L15 70V30L50 15Z" stroke={light ? "white" : "#10b981"} strokeWidth="3" />
-    <path d="M30 40L50 70L70 40" stroke={light ? "white" : "#10b981"} strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+const TEAM_DATA = [
+  {
+    name: "Alexander Velmor",
+    role: "Visionary CEO & Founder",
+    img: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=400",
+    bio: "The architect of Velmor's prestige. Alexander doesn't just sell property he engineers legacy environments for the worlds elite."
+  },
+  {
+    name: "Elena Sterling",
+    role: "Director of Private Estates",
+    img: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=400",
+    bio: "Elena curates the most exclusive residential list in the US. Her eye for detail ensures that every home is a functional work of art."
+  },
+  {
+    name: "Marcus Thorne",
+    role: "Commercial Strategist",
+    img: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400",
+    bio: "Marcus bridges the gap between commercial viability and aesthetic excellence, securing high yield assets for institutional investors."
+  }
+];
+
+const Modal = ({ property, onClose }) => {
+  const [activeImg, setActiveImg] = useState(property?.img);
+  useEffect(() => { if (property) setActiveImg(property.img); }, [property]);
+  if (!property) return null;
+
+  return (
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/95 backdrop-blur-xl p-4 md:p-8 animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-5xl rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row relative shadow-2xl animate-in zoom-in duration-500">
+        <button onClick={onClose} className="absolute top-6 right-6 z-[1001] p-3 bg-zinc-100 rounded-full hover:bg-zinc-200 transition-all">
+          <X size={20} className="text-zinc-900" />
+        </button>
+        
+        <div className="w-full md:w-3/5 h-[40vh] md:h-auto bg-zinc-100 relative overflow-hidden">
+          <img src={activeImg} className="w-full h-full object-cover animate-in fade-in duration-700" alt="Property Detail" />
+          <div className="absolute bottom-6 left-6 flex gap-3">
+            {[property.img, ...(property.gallery || [])].map((g, idx) => (
+              <img 
+                key={idx} src={g} 
+                onClick={() => setActiveImg(g)}
+                className={`w-16 h-16 rounded-xl border-2 cursor-pointer transition-all ${activeImg === g ? 'border-emerald-500 scale-110 shadow-lg' : 'border-white/50 hover:border-white opacity-70 hover:opacity-100'}`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="w-full md:w-2/5 p-8 md:p-12 overflow-y-auto max-h-[50vh] md:max-h-[90vh]">
+          <span className="text-emerald-600 font-bold uppercase text-[10px] tracking-widest block mb-2">{property.category}</span>
+          <h2 className="text-3xl md:text-4xl font-serif italic mb-6">{property.title}</h2>
+          <div className="flex items-center gap-2 text-zinc-400 text-sm mb-8"><MapPin size={16}/> {property.location}</div>
+          <p className="text-zinc-500 leading-relaxed mb-8 text-sm md:text-base font-light">{property.desc}</p>
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="p-5 bg-zinc-50 rounded-2xl">
+              <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block mb-1">Price</span>
+              <span className="text-lg font-serif text-emerald-600">{property.price}</span>
+            </div>
+            <div className="p-5 bg-zinc-50 rounded-2xl">
+              <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest block mb-1">Size</span>
+              <span className="text-lg font-serif text-zinc-800">{property.details}</span>
+            </div>
+          </div>
+          <button className="w-full py-5 bg-zinc-950 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all">Connect with Advisor</button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function App() {
   const [activePage, setPage] = useState('home');
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [activeImgIndex, setActiveImgIndex] = useState(0);
-  const [wishlist, setWishlist] = useState([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [inquirySent, setInquirySent] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [filter, setFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
-  const [propertyValue, setPropertyValue] = useState(2450000);
-  const [appreciation, setAppreciation] = useState(7);
-  const [years, setYears] = useState(10);
-  const [futureValue, setFutureValue] = useState(0);
+  const [servants, setServants] = useState(2);
+  const [techLevel, setTechLevel] = useState(1);
+  const [landArea, setLandArea] = useState(5000);
+
+  const maintenanceCost = useMemo(() => {
+    const base = (servants * 4500) + (landArea * 0.5);
+    const multiplier = [1, 1.5, 2.5][techLevel];
+    return Math.floor(base * multiplier);
+  }, [servants, techLevel, landArea]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    setIsMenuOpen(false); // Close menu if transition occurs
-  }, [activePage]);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const val = propertyValue * Math.pow(1 + (appreciation / 100), years);
-    setFutureValue(val);
-  }, [propertyValue, appreciation, years]);
+  const filteredProps = useMemo(() => {
+    return PROPERTY_DATA.filter(p => {
+      const matchesFilter = filter === 'All' || p.category === filter;
+      const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                            p.location.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesFilter && matchesSearch;
+    });
+  }, [filter, searchQuery]);
 
-  const openGalleryModal = (item) => {
-    setSelectedItem(item);
-    setActiveImgIndex(0);
+  const navItems = [
+    { id: 'home', label: 'Home' },
+    { id: 'gallery', label: 'Gallery' },
+    { id: 'planner', label: 'Lifestyle' },
+    { id: 'team', label: 'The Group' },
+    { id: 'contact', label: 'Contact' }
+  ];
+
+  const handleNav = (id) => {
+    setPage(id);
+    setIsMenuOpen(false);
+    window.scrollTo(0, 0);
   };
-
-  const toggleWishlist = (e, id) => {
-    e.stopPropagation();
-    setWishlist(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
-  };
-
-  const handleInquiry = () => {
-    setInquirySent(true);
-    setTimeout(() => setInquirySent(false), 3000);
-  };
-
-  const renderLegal = (title, content) => (
-    <section className="pt-40 pb-40 px-6 max-w-4xl mx-auto min-h-screen animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <button 
-        onClick={() => setPage('home')} 
-        className="flex items-center gap-2 text-zinc-400 hover:text-emerald-600 transition-all mb-12 text-[10px] uppercase tracking-widest font-bold"
-      >
-        <ArrowLeft size={16}/> Back to home
-      </button>
-      <h1 className="text-5xl md:text-7xl font-serif italic mb-12">{title}</h1>
-      <div className="prose prose-zinc max-w-none space-y-8 text-zinc-500 leading-loose text-lg font-light">
-        {content}
-      </div>
-    </section>
-  );
 
   return (
-    <div className="bg-white min-h-screen font-sans text-zinc-900 selection:bg-emerald-100 selection:text-emerald-900 overflow-x-hidden">
+    <div className="bg-white min-h-screen font-sans text-zinc-900 overflow-x-hidden selection:bg-emerald-100">
       
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${scrolled || activePage !== 'home' ? 'bg-white/95 backdrop-blur-xl py-4 shadow-sm' : 'bg-transparent py-8'}`}>
+      <nav className={`fixed top-0 w-full z-[100] transition-all duration-500 ${scrolled || activePage !== 'home' ? 'bg-white/80 backdrop-blur-md py-4 border-b border-zinc-100' : 'bg-transparent py-8'}`}>
         <div className="max-w-[1400px] mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setPage('home')}>
-            <VelmorLogo className="w-10 h-10 transition-transform group-hover:scale-110" light={!scrolled && activePage === 'home'} />
-            <span className={`tracking-[0.3em] font-serif font-bold text-lg ${scrolled || activePage !== 'home' ? 'text-zinc-900' : 'text-white'}`}>VELMOR</span>
+          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => handleNav('home')}>
+            <div className="w-8 h-8 bg-zinc-950 text-white flex items-center justify-center rounded-lg group-hover:bg-emerald-600 transition-colors">
+              <Building2 size={16} />
+            </div>
+            <span className={`tracking-[0.4em] font-serif font-bold text-lg ${scrolled || activePage !== 'home' ? 'text-zinc-900' : 'text-white'}`}>VELMOR</span>
           </div>
 
-          <div className="hidden md:flex gap-10">
-            {['home', 'gallery', 'planner', 'contact'].map(link => (
-              <button
-                key={link}
-                onClick={() => setPage(link)}
-                className={`text-[10px] uppercase tracking-[0.3em] font-bold transition-all relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-emerald-500 after:transition-all hover:after:w-full ${
-                  activePage === link 
-                    ? (scrolled || activePage !== 'home' ? 'text-emerald-600 after:w-full' : 'text-white after:w-full')
-                    : (scrolled || activePage !== 'home' ? 'text-zinc-400 hover:text-zinc-900' : 'text-white/60 hover:text-white')
-                }`}
+          <div className="hidden md:flex items-center gap-10">
+            {navItems.map(item => (
+              <button 
+                key={item.id} onClick={() => handleNav(item.id)}
+                className={`text-[10px] uppercase tracking-[0.3em] font-bold transition-all relative py-1 ${activePage === item.id ? 'text-emerald-600' : (scrolled || activePage !== 'home' ? 'text-zinc-400 hover:text-zinc-900' : 'text-white/60 hover:text-white')}`}
               >
-                {link}
+                {item.label}
               </button>
             ))}
           </div>
 
-          <button 
-            className={`md:hidden p-2 rounded-full transition-colors ${scrolled || activePage !== 'home' ? 'text-zinc-900 bg-zinc-100' : 'text-white bg-white/10'}`}
-            onClick={() => setIsMenuOpen(true)}
-          >
-            <Menu size={20} />
+          <button className="md:hidden p-2 z-[110]" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={24} className="text-zinc-900" /> : <Menu size={24} className={scrolled || activePage !== 'home' ? 'text-zinc-900' : 'text-white'} />}
           </button>
         </div>
       </nav>
 
-      <div className={`fixed inset-0 bg-zinc-950 z-[200] transition-transform duration-700 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-8 flex justify-between items-center border-b border-white/5">
-          <div className="flex items-center gap-3 text-white">
-            <VelmorLogo className="w-8 h-8" light />
-            <span className="tracking-widest">VELMOR</span>
-          </div>
-          <button onClick={() => setIsMenuOpen(false)} className="text-white p-2 border border-white/10 rounded-full hover:bg-white/5"><X size={24} /></button>
-        </div>
-        <div className="flex flex-col p-12 gap-8 text-center mt-10">
-          {['home', 'gallery', 'planner', 'contact'].map((link, idx) => (
-            <button 
-              key={link} 
-              onClick={() => setPage(link)} 
-              className={`text-4xl font-serif italic transform transition-all delay-[${idx * 100}ms] ${activePage === link ? 'text-emerald-500 translate-x-4' : 'text-zinc-400 hover:text-white'}`}
-            >
-              {link.charAt(0).toUpperCase() + link.slice(1)}
+      <div className={`fixed inset-0 bg-white z-[105] p-12 transition-all duration-500 ease-in-out flex flex-col justify-center ${isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full pointer-events-none'}`}>
+        <div className="space-y-10">
+          {navItems.map((item) => (
+            <button key={item.id} onClick={() => handleNav(item.id)} className="block text-4xl font-serif italic text-zinc-900 text-left w-full border-b border-zinc-50 pb-4">
+              {item.label}
             </button>
           ))}
         </div>
@@ -218,42 +225,39 @@ export default function App() {
       <main>
         {activePage === 'home' && (
           <>
-
-            <section className="h-screen relative flex items-center justify-center text-center px-6">
-              <div className="absolute inset-0 z-0">
-                <img src="https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600" className="w-full h-full object-cover" alt="Elite Estate" />
-                <div className="absolute inset-0 bg-zinc-950/75 backdrop-blur-[1px]" />
-              </div>
-              <div className="relative z-10 max-w-4xl animate-in fade-in zoom-in duration-1000">
-                <p className="text-[10px] uppercase font-bold tracking-[0.6em] text-emerald-500 mb-8">The 2026 Collection</p>
-                <h1 className="text-5xl md:text-8xl font-serif italic text-white mb-12 tracking-tight leading-none">
-                  Architectural <br/> Sovereignity.
-                </h1>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <button onClick={() => setPage('gallery')} className="px-10 py-5 bg-white text-zinc-900 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-500 hover:text-white transition-all transform hover:-translate-y-1 shadow-xl">Explore Portfolio</button>
-                  <button onClick={() => setPage('contact')} className="px-10 py-5 border border-white/20 text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-all transform hover:-translate-y-1">Private Consult</button>
+            <section className="h-screen relative flex items-center justify-center overflow-hidden">
+              <img src="https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600" className="absolute inset-0 w-full h-full object-cover scale-105 animate-zoom" alt="Hero" />
+              <div className="absolute inset-0 bg-zinc-950/40" />
+              <div className="relative z-10 text-center px-6 max-w-4xl">
+                <p className="text-emerald-400 font-bold tracking-[0.5em] text-[10px] uppercase mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">High-End Real Estate Vanguard</p>
+                <h1 className="text-5xl md:text-8xl font-serif italic text-white mb-10 leading-[1.1] animate-in fade-in slide-in-from-bottom-10 duration-1000">Beyond Living. <br/><span className="font-sans not-italic font-light opacity-80">Architecting Legacies.</span></h1>
+                <div className="flex flex-col md:flex-row gap-5 justify-center animate-in fade-in slide-in-from-bottom-12 duration-1000">
+                  <button onClick={() => setPage('gallery')} className="px-12 py-5 bg-white text-zinc-950 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all">Explore Collection</button>
+                  <button onClick={() => setPage('contact')} className="px-12 py-5 border border-white/30 backdrop-blur-md text-white rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white/10 transition-all">Book Consultation</button>
                 </div>
               </div>
             </section>
 
-            <section className="py-32 px-6 bg-zinc-50 overflow-hidden">
-              <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-                <div className="relative">
-                  <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl group">
-                    <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=800" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Office Culture" />
-                  </div>
-                  <div className="absolute -bottom-10 -right-10 bg-white p-10 rounded-3xl shadow-xl hidden md:block max-w-xs border border-zinc-100 animate-bounce-subtle">
-                    <p className="text-emerald-600 font-bold mb-2">Verified Authority</p>
-                    <p className="text-xs text-zinc-400 leading-relaxed italic">"Velmor doesn't just list properties. we curate legacies for the next generation."</p>
+            <section className="py-24 md:py-40 px-6">
+              <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+                <div className="space-y-10">
+                  <h2 className="text-4xl md:text-6xl font-serif italic leading-tight">Invisible details of prestige.</h2>
+                  <p className="text-zinc-500 text-lg leading-relaxed font-light">
+                    Velmor Premier is a strategic luxury consultancy. We shift the focus from square footage to "Life Value." Our philosophy centers on emotional architecture and invisible technology.
+                  </p>
+                  <div className="grid grid-cols-2 gap-10 pt-6">
+                    <div>
+                      <h4 className="text-3xl font-serif italic mb-2">$8.4B+</h4>
+                      <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Asset Volume</p>
+                    </div>
+                    <div>
+                      <h4 className="text-3xl font-serif italic mb-2">98%</h4>
+                      <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Retention</p>
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <span className="text-emerald-600 font-bold uppercase text-[10px] tracking-[0.4em] mb-6 block">The Velmor Philosophy</span>
-                  <h2 className="text-4xl md:text-6xl font-serif italic mb-10 leading-tight">Beyond Real Estate. <br/> A Curated Lifestyle.</h2>
-                  <div className="space-y-6 text-zinc-500 leading-relaxed font-light text-lg">
-                    <p>Founded in 2020 and evolving into a North Carolina powerhouse by 2026, Velmor represents the intersection of technology, luxury, and privacy.</p>
-                    <p>We specialize in bio adaptive homes and corporate monoliths that prioritize environmental harmony without compromising the opulence of modern living.</p>
-                  </div>
+                <div className="relative">
+                  <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=800" className="w-full aspect-square object-cover rounded-[3rem] shadow-2xl" alt="Architecture" />
                 </div>
               </div>
             </section>
@@ -261,32 +265,50 @@ export default function App() {
         )}
 
         {activePage === 'gallery' && (
-          <section className="pt-40 pb-32 px-6 max-w-[1400px] mx-auto min-h-screen animate-in fade-in duration-700">
-            <div className="mb-20">
-              <span className="text-emerald-600 font-bold uppercase text-[10px] tracking-[0.4em] mb-4 block">Selected Holdings</span>
-              <h2 className="text-5xl md:text-7xl font-serif italic">Portfolio.</h2>
+          <section className="pt-32 pb-32 px-6 max-w-[1400px] mx-auto animate-in fade-in duration-700">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
+              <div className="max-w-xl">
+                <h2 className="text-5xl md:text-6xl font-serif italic mb-6 leading-tight">Curated <br/> Environments.</h2>
+                <p className="text-zinc-400 text-[10px] font-bold tracking-[0.2em] uppercase">Limited North Carolina Assets.</p>
+              </div>
+              <div className="flex bg-zinc-50 p-1.5 rounded-2xl border border-zinc-100 w-full md:w-auto">
+                {['All', 'Residential', 'Commercial'].map(c => (
+                  <button key={c} onClick={() => setFilter(c)} className={`flex-1 md:flex-none px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${filter === c ? 'bg-white text-emerald-600 shadow-sm' : 'text-zinc-400 hover:text-zinc-900'}`}>{c}</button>
+                ))}
+              </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-              {PROPERTY_DATA.map(item => (
-                <div key={item.id} className="group relative cursor-pointer" onClick={() => openGalleryModal(item)}>
-                  <div className="aspect-[16/10] overflow-hidden rounded-[2.5rem] bg-zinc-100 mb-8 relative shadow-lg">
-                    <img src={item.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" alt={item.title} />
-                    <button onClick={(e) => toggleWishlist(e, item.id)} className={`absolute top-6 right-6 p-4 rounded-full backdrop-blur-md transition-all ${wishlist.includes(item.id) ? 'bg-red-500 text-white' : 'bg-white/20 text-white hover:bg-white/40'}`}>
-                      <Heart size={20} fill={wishlist.includes(item.id) ? "currentColor" : "none"} />
-                    </button>
-                    <div className="absolute bottom-6 left-6 right-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all">
-                       <div className="bg-white/95 backdrop-blur px-8 py-5 rounded-2xl flex justify-between items-center shadow-2xl">
-                          <span className="text-xs font-bold tracking-widest uppercase">Inspect Estate</span>
-                          <Maximize2 size={18} className="text-emerald-600" />
-                       </div>
+
+            <div className="mb-16 relative">
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 text-zinc-400 pl-4">
+                <Search size={20} strokeWidth={1.5} />
+              </div>
+              <input 
+                type="text"
+                placeholder="Find by name or city..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-transparent border-b border-zinc-100 py-6 pl-14 pr-8 text-xl md:text-2xl font-serif italic focus:outline-none focus:border-emerald-600 transition-all placeholder:text-zinc-200"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+              {filteredProps.map((item, idx) => (
+                <div 
+                  key={item.id} 
+                  className="group cursor-pointer animate-in fade-in slide-in-from-bottom-8"
+                  style={{ animationDelay: `${idx * 100}ms` }}
+                  onClick={() => setSelectedProperty(item)}
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[2.5rem] mb-8">
+                    <img src={item.img} className="w-full h-full object-cover transition-transform duration-[5s] group-hover:scale-110" />
+                    <div className="absolute top-6 left-6">
+                      <span className="px-4 py-1.5 bg-white/90 backdrop-blur text-[9px] font-black uppercase tracking-widest text-emerald-600 rounded-full">{item.badge}</span>
                     </div>
                   </div>
-                  <div className="flex justify-between px-2">
-                    <div>
-                      <h3 className="text-2xl font-serif italic mb-1 group-hover:text-emerald-600 transition-colors">{item.title}</h3>
-                      <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-bold">{item.location}</p>
-                    </div>
-                    <p className="text-xl font-serif font-bold">{item.price}</p>
+                  <h3 className="text-2xl font-serif italic mb-2 group-hover:text-emerald-600 transition-colors">{item.title}</h3>
+                  <div className="flex items-center justify-between">
+                    <span className="text-emerald-600 font-bold font-serif">{item.price}</span>
+                    <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest flex items-center gap-1.5"><MapPin size={12}/> {item.location}</span>
                   </div>
                 </div>
               ))}
@@ -295,259 +317,159 @@ export default function App() {
         )}
 
         {activePage === 'planner' && (
-          <section className="pt-40 pb-40 px-6 max-w-[1400px] mx-auto min-h-screen animate-in fade-in slide-in-from-bottom-6 duration-700">
-            <div className="mb-20">
-              <span className="text-emerald-600 font-bold uppercase text-[10px] tracking-[0.4em] mb-4 block flex items-center gap-2">
-                <ShieldCheck size={14}/> Exclusive Advisory Tool
-              </span>
-              <h2 className="text-5xl md:text-7xl font-serif italic mb-4">Asset Guardian.</h2>
-              <p className="text-zinc-400 font-light">Simulate your portfolio growth within the North Carolina luxury corridor.</p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-              {/* Controls */}
-              <div className="lg:col-span-5 space-y-10 bg-zinc-50 p-10 md:p-12 rounded-[3rem] border border-zinc-100 shadow-sm">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-end">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-400">Current Valuation</label>
-                    <span className="text-xl font-serif font-bold text-emerald-600">${propertyValue.toLocaleString()}</span>
+          <section className="pt-32 pb-32 px-6 max-w-[1400px] mx-auto animate-in fade-in duration-700">
+            <div className="flex flex-col lg:flex-row gap-20">
+              <div className="lg:w-1/2 space-y-12">
+                <h2 className="text-5xl md:text-7xl font-serif italic leading-tight">Lifestyle <br/> Architecture.</h2>
+                <div className="space-y-16">
+                  <div className="space-y-6">
+                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">
+                      <span>Staff Count</span>
+                      <span className="text-emerald-600 font-black">{servants} Persons</span>
+                    </div>
+                    <input type="range" min="1" max="15" value={servants} onChange={(e) => setServants(Number(e.target.value))} className="w-full h-[2px] bg-zinc-100 appearance-none accent-emerald-600 rounded-full" />
                   </div>
-                  <input 
-                    type="range" min="500000" max="25000000" step="100000" 
-                    value={propertyValue} onChange={e => setPropertyValue(Number(e.target.value))}
-                    className="w-full accent-emerald-500 h-1 rounded-full appearance-none bg-zinc-200 cursor-pointer"
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between items-end">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-400">Annual Appreciation</label>
-                    <span className="text-xl font-serif font-bold text-emerald-600">{appreciation}%</span>
+                  <div className="space-y-6">
+                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">
+                      <span>Total Estate Size</span>
+                      <span className="text-emerald-600 font-black">{landArea.toLocaleString()} SQFT</span>
+                    </div>
+                    <input type="range" min="1000" max="50000" step="500" value={landArea} onChange={(e) => setLandArea(Number(e.target.value))} className="w-full h-[2px] bg-zinc-100 appearance-none accent-emerald-600 rounded-full" />
                   </div>
-                  <input 
-                    type="range" min="1" max="25" step="0.5" 
-                    value={appreciation} onChange={e => setAppreciation(Number(e.target.value))}
-                    className="w-full accent-emerald-500 h-1 rounded-full appearance-none bg-zinc-200 cursor-pointer"
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between items-end">
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-zinc-400">Holding Period</label>
-                    <span className="text-xl font-serif font-bold text-emerald-600">{years} Years</span>
-                  </div>
-                  <input 
-                    type="range" min="1" max="50" step="1" 
-                    value={years} onChange={e => setYears(Number(e.target.value))}
-                    className="w-full accent-emerald-500 h-1 rounded-full appearance-none bg-zinc-200 cursor-pointer"
-                  />
-                </div>
-
-                <div className="pt-6">
-                  <button onClick={() => setPage('contact')} className="w-full py-5 bg-zinc-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 shadow-lg group">
-                    Schedule Advisory <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
                 </div>
               </div>
-
-              <div className="lg:col-span-7 h-full flex flex-col justify-center">
-                <div className="relative p-12 bg-white rounded-[3rem] border border-zinc-100 shadow-2xl overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-8 text-emerald-50 opacity-10 pointer-events-none transform translate-x-10 -translate-y-10 group-hover:scale-110 transition-transform duration-1000">
-                    <BarChart3 size={300} />
+              <div className="lg:w-1/2">
+                <div className="bg-zinc-950 p-16 rounded-[3.5rem] text-white shadow-2xl relative overflow-hidden h-full flex flex-col justify-between">
+                  <div className="space-y-4">
+                    <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald-500">Monthly Burn Rate</h4>
+                    <div className="text-6xl md:text-8xl font-serif italic">${maintenanceCost.toLocaleString()} <span className="text-sm text-zinc-600 tracking-normal">/Month</span></div>
                   </div>
-                  
-                  <div className="relative z-10">
-                    <p className="text-[10px] uppercase font-bold tracking-widest text-emerald-500 mb-6 flex items-center gap-2">
-                       <TrendingUp size={12}/> Projected Sovereign Value
-                    </p>
-                    <h3 className="text-6xl md:text-8xl font-serif italic mb-8 tracking-tighter">
-                      ${Math.round(futureValue).toLocaleString()}
-                    </h3>
-                    
-                    <div className="flex flex-wrap gap-8 pt-12 border-t border-zinc-50">
-                      <div>
-                        <p className="text-[9px] uppercase font-bold text-zinc-400 mb-2">Total Gain</p>
-                        <p className="text-2xl font-serif text-emerald-600">+${Math.round(futureValue - propertyValue).toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-[9px] uppercase font-bold text-zinc-400 mb-2">Daily Growth (Est.)</p>
-                        <p className="text-2xl font-serif text-zinc-900">${Math.round((futureValue - propertyValue) / (years * 365)).toLocaleString()}</p>
-                      </div>
-                    </div>
-
-                    <div className="mt-12 p-6 bg-zinc-50 rounded-2xl flex items-center gap-4 border border-zinc-100">
-                      <ShieldAlert size={20} className="text-emerald-600 shrink-0" />
-                      <p className="text-xs text-zinc-400 leading-relaxed italic">Values are based on NC 2026 market projections. Actual yields depend on local zoning and economic cycles.</p>
-                    </div>
-                  </div>
+                  <p className="text-zinc-500 text-sm italic font-light max-w-xs mt-12">Estimates cover payroll, energy, and precision maintenance schedules.</p>
                 </div>
               </div>
             </div>
           </section>
         )}
 
-        {activePage === 'contact' && (
-          <section className="pt-40 pb-40 px-6 max-w-[1400px] mx-auto min-h-screen animate-in fade-in slide-in-from-right-4 duration-700">
-             <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
-                <div>
-                   <span className="text-emerald-600 font-bold uppercase text-[10px] tracking-[0.5em] mb-10 block underline underline-offset-8">Direct Liaison</span>
-                   <h2 className="text-6xl md:text-8xl font-serif italic leading-none mb-16">Acquire <br/> Clarity.</h2>
-                   <div className="space-y-12">
-                      <div className="flex items-start gap-8 group">
-                         <div className="w-16 h-16 rounded-3xl bg-zinc-50 flex items-center justify-center text-zinc-400 border border-zinc-100 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors"><Phone size={24}/></div>
-                         <div><p className="text-[10px] uppercase tracking-[0.2em] text-zinc-300 font-bold mb-2">Private Line</p><p className="text-2xl font-light hover:text-emerald-600 transition-colors">+1 (704) 555-VELM</p></div>
-                      </div>
-                      <div className="flex items-start gap-8 group">
-                         <div className="w-16 h-16 rounded-3xl bg-zinc-50 flex items-center justify-center text-zinc-400 border border-zinc-100 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors"><Mail size={24}/></div>
-                         <div><p className="text-[10px] uppercase tracking-[0.2em] text-zinc-300 font-bold mb-2">Email Dossier</p><p className="text-2xl font-light hover:text-emerald-600 transition-colors">concierge@velmor.com</p></div>
-                      </div>
-                      <div className="flex items-start gap-8 group">
-                         <div className="w-16 h-16 rounded-3xl bg-zinc-50 flex items-center justify-center text-zinc-400 border border-zinc-100 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors"><MapPin size={24}/></div>
-                         <div><p className="text-[10px] uppercase tracking-[0.2em] text-zinc-300 font-bold mb-2">Office Hub</p><p className="text-2xl font-light">42 Tryon St, Charlotte, NC 28202</p></div>
-                      </div>
-                   </div>
-                </div>
-                <div className="bg-zinc-50 p-10 md:p-20 rounded-[4rem] border border-zinc-100 shadow-inner">
-                   <form className="space-y-8" onSubmit={e => e.preventDefault()}>
-                      <div className="space-y-2">
-                        <label className="text-[9px] uppercase tracking-widest text-zinc-400 font-bold ml-4">Full Identity</label>
-                        <input type="text" className="w-full bg-white py-6 px-10 rounded-2xl outline-none border border-zinc-200 focus:border-emerald-500 transition-colors shadow-sm" placeholder="e.g. Julian Vane" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[9px] uppercase tracking-widest text-zinc-400 font-bold ml-4">Secure Channel</label>
-                        <input type="email" className="w-full bg-white py-6 px-10 rounded-2xl outline-none border border-zinc-200 focus:border-emerald-500 transition-colors shadow-sm" placeholder="email@domain.com" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[9px] uppercase tracking-widest text-zinc-400 font-bold ml-4">Subject of Interest</label>
-                        <textarea className="w-full bg-white py-6 px-10 rounded-2xl outline-none border border-zinc-200 focus:border-emerald-500 transition-colors h-40 resize-none shadow-sm" placeholder="Specify property or investment goals..."></textarea>
-                      </div>
-                      <button className="w-full py-6 bg-zinc-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-emerald-600 transition-all shadow-xl transform hover:-translate-y-1">Engage Team</button>
-                   </form>
-                </div>
+        {activePage === 'team' && (
+          <section className="pt-32 pb-32 px-6 max-w-[1400px] mx-auto animate-in fade-in duration-700">
+             <div className="text-center mb-24 max-w-2xl mx-auto">
+                <h2 className="text-5xl md:text-7xl font-serif italic mb-8">The Vanguard.</h2>
+                <p className="text-zinc-500 font-light text-lg">Discreet advisors bridging the gap between desire and legacy.</p>
+             </div>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+                {TEAM_DATA.map((m, i) => (
+                  <div key={i} className="group text-center">
+                    <div className="aspect-[4/5] overflow-hidden rounded-[3rem] mb-10 border border-zinc-50 grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:shadow-xl">
+                      <img src={m.img} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                    </div>
+                    <h3 className="text-2xl font-serif italic mb-1">{m.name}</h3>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-6">{m.role}</p>
+                    <p className="text-zinc-400 text-sm italic font-light px-8">"{m.bio}"</p>
+                  </div>
+                ))}
              </div>
           </section>
         )}
 
-        {activePage === 'terms' && renderLegal("Terms of Service", (
-          <>
-            <p>By using the Velmor website and services, you agree to comply with our professional conduct standards. Our listings are exclusive and require verification before disclosure of sensitive architectural data.</p>
-            <p>All property valuations provided on this site are for informational purposes only and do not constitute a final appraisal until a private survey is conducted by our accredited team.</p>
-            <p>Intellectual property regarding architectural plans and proprietary monolith designs remains the sole property of Velmor Property Group Inc.</p>
-          </>
-        ))}
+        {activePage === 'contact' && (
+          <section className="pt-32 pb-32 px-6 max-w-[1400px] mx-auto animate-in fade-in duration-700">
+            <div className="flex flex-col lg:flex-row gap-24 lg:gap-32">
+              <div className="lg:w-2/5 space-y-12">
+                <h2 className="text-5xl md:text-7xl font-serif italic leading-tight">Let's Talk <br/> Strategy.</h2>
+                <div className="space-y-10">
+                  <div className="flex items-center gap-6 group cursor-pointer">
+                    <div className="w-12 h-12 rounded-full bg-zinc-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                      <Mail size={20} />
+                    </div>
+                    <span className="text-lg font-serif italic">concierge@velmor.com</span>
+                  </div>
+                  <div className="flex items-center gap-6 group cursor-pointer">
+                    <div className="w-12 h-12 rounded-full bg-zinc-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                      <Phone size={20} />
+                    </div>
+                    <span className="text-lg font-serif italic">+1 (800) VELMOR</span>
+                  </div>
+                </div>
+              </div>
 
-        {activePage === 'privacy' && renderLegal("Privacy & Cookies", (
-          <>
-            <p>Your privacy is our priority. We utilize end-to-end encryption for all dossier requests. We do not sell your personal data to third-party marketing firms.</p>
-            <p><strong>Cookies:</strong> We use essential cookies to maintain your session security and preference cookies to store your property wishlist. No tracking cookies are used for off site profiling.</p>
-            <p><strong>Security:</strong> All financial discussions are conducted via secure, private channels. We comply with NC state regulations regarding real estate data protection.</p>
-          </>
-        ))}
+              <div className="lg:w-3/5">
+                <form className="space-y-12" onSubmit={e => e.preventDefault()}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+                    <div className="relative group">
+                      <input type="text" id="name" className="peer w-full bg-transparent border-b border-zinc-100 py-4 text-lg font-light focus:outline-none focus:border-emerald-600 transition-all placeholder-transparent" placeholder="Name" />
+                      <label htmlFor="name" className="absolute left-0 -top-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-placeholder-shown:font-serif peer-placeholder-shown:italic peer-placeholder-shown:tracking-normal peer-focus:-top-4 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-[0.2em] peer-focus:text-emerald-600 transition-all pointer-events-none">Your Full Name</label>
+                    </div>
+                    <div className="relative group">
+                      <input type="email" id="email" className="peer w-full bg-transparent border-b border-zinc-100 py-4 text-lg font-light focus:outline-none focus:border-emerald-600 transition-all placeholder-transparent" placeholder="Email" />
+                      <label htmlFor="email" className="absolute left-0 -top-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-placeholder-shown:font-serif peer-placeholder-shown:italic peer-placeholder-shown:tracking-normal peer-focus:-top-4 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-[0.2em] peer-focus:text-emerald-600 transition-all pointer-events-none">Email Address</label>
+                    </div>
+                  </div>
+                  
+                  <div className="relative group">
+                    <select id="type" className="peer w-full bg-transparent border-b border-zinc-100 py-4 text-lg font-light italic focus:outline-none focus:border-emerald-600 transition-all appearance-none cursor-pointer">
+                      <option>Acquisition Consultation</option>
+                      <option>Portfolio Management</option>
+                      <option>Lifestyle Concierge</option>
+                    </select>
+                    <label htmlFor="type" className="absolute left-0 -top-4 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 transition-all">Interest Type</label>
+                  </div>
+
+                  <div className="relative group">
+                    <textarea id="msg" rows="3" className="peer w-full bg-transparent border-b border-zinc-100 py-4 text-lg font-light focus:outline-none focus:border-emerald-600 transition-all placeholder-transparent resize-none" placeholder="Message"></textarea>
+                    <label htmlFor="msg" className="absolute left-0 -top-4 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-300 peer-placeholder-shown:text-lg peer-placeholder-shown:top-4 peer-placeholder-shown:font-serif peer-placeholder-shown:italic peer-placeholder-shown:tracking-normal peer-focus:-top-4 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-[0.2em] peer-focus:text-emerald-600 transition-all pointer-events-none">Tell us about your legacy</label>
+                  </div>
+
+                  <button className="flex items-center gap-6 group py-4">
+                    <div className="w-16 h-16 rounded-full bg-zinc-950 flex items-center justify-center text-white group-hover:bg-emerald-600 transition-all duration-500 shadow-xl group-hover:scale-110">
+                      <Send size={24} />
+                    </div>
+                    <div className="text-left">
+                      <span className="block text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600">Secure Send</span>
+                      <span className="text-2xl font-serif italic">Submit Request</span>
+                    </div>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
+        )}
       </main>
 
-      {selectedItem && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-zinc-950/95 backdrop-blur-md" onClick={() => setSelectedItem(null)} />
-          <div className="bg-white w-full max-w-6xl h-full max-h-[90vh] rounded-[3rem] overflow-hidden relative shadow-2xl flex flex-col md:flex-row animate-in fade-in zoom-in duration-300">
-            <button 
-              onClick={() => setSelectedItem(null)} 
-              className="absolute top-8 right-8 z-[300] p-3 bg-white/20 hover:bg-white/40 rounded-full text-zinc-600 transition-all hover:rotate-90"
-            >
-              <X size={24} />
-            </button>
-            
-            <div className="w-full md:w-3/5 h-[40%] md:h-auto overflow-hidden bg-zinc-100 flex flex-col">
-              <div className="flex-1 overflow-hidden relative">
-                <img 
-                  src={([selectedItem.img, ...selectedItem.gallery])[activeImgIndex]} 
-                  className="w-full h-full object-cover transition-opacity duration-500" 
-                  alt="Viewing" 
-                />
-              </div>
-              <div className="h-24 bg-white flex p-3 gap-3 overflow-x-auto border-t border-zinc-100 no-scrollbar">
-                {([selectedItem.img, ...selectedItem.gallery]).map((g, i) => (
-                  <img 
-                    key={i} 
-                    src={g} 
-                    onClick={() => setActiveImgIndex(i)}
-                    className={`h-full aspect-square object-cover rounded-xl cursor-pointer transition-all ${activeImgIndex === i ? 'ring-4 ring-emerald-500 scale-95 opacity-100 shadow-lg' : 'opacity-40 hover:opacity-100'}`} 
-                    alt={`Thumbnail ${i}`} 
-                  />
-                ))}
-              </div>
-            </div>
+      <Modal property={selectedProperty} onClose={() => setSelectedProperty(null)} />
 
-            <div className="w-full md:w-2/5 p-8 md:p-12 overflow-y-auto flex flex-col justify-between bg-zinc-50/50">
-              <div>
-                <div className="flex justify-between items-start mb-6">
-                   <div>
-                      <span className="text-emerald-600 font-bold uppercase text-[9px] tracking-[0.4em] mb-3 block">Selected Listing</span>
-                      <h2 className="text-3xl font-serif italic">{selectedItem.title}</h2>
-                   </div>
-                   <button onClick={(e) => toggleWishlist(e, selectedItem.id)} className={`p-4 rounded-full transition-all ${wishlist.includes(selectedItem.id) ? 'bg-red-50 text-red-500 shadow-sm' : 'bg-zinc-100 text-zinc-300'}`}>
-                      <Heart size={20} fill={wishlist.includes(selectedItem.id) ? "currentColor" : "none"} />
-                   </button>
-                </div>
-                <p className="text-zinc-500 font-light leading-relaxed mb-8 italic font-serif">"{selectedItem.desc}"</p>
-                <div className="space-y-6 mb-8 py-6 border-y border-zinc-200/50">
-                   <div className="flex justify-between text-sm"><span className="text-zinc-400 font-bold uppercase text-[9px]">Location</span><span className="font-medium">{selectedItem.location}</span></div>
-                   <div className="flex justify-between text-sm"><span className="text-zinc-400 font-bold uppercase text-[9px]">Valuation</span><span className="font-serif text-emerald-600 font-bold">{selectedItem.price}</span></div>
-                   <div className="flex justify-between text-sm"><span className="text-zinc-400 font-bold uppercase text-[9px]">Area</span><span className="font-medium">{selectedItem.area}</span></div>
-                   <div className="flex justify-between text-sm"><span className="text-zinc-400 font-bold uppercase text-[9px]">Configuration</span><span className="font-medium">{selectedItem.rooms}</span></div>
-                </div>
+      <footer className="bg-zinc-950 text-white py-32 px-6">
+        <div className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-16">
+           <div className="col-span-1 md:col-span-2 space-y-10">
+              <div className="flex items-center gap-2">
+                 <Building2 className="text-emerald-500" size={32} />
+                 <span className="font-serif font-bold text-3xl tracking-[0.2em] uppercase italic">Velmor</span>
               </div>
-
-              <button 
-                onClick={handleInquiry}
-                disabled={inquirySent}
-                className={`w-full py-5 rounded-2xl font-bold uppercase tracking-[0.3em] text-[10px] transition-all flex items-center justify-center gap-3 shadow-lg ${inquirySent ? 'bg-green-500 text-white' : 'bg-zinc-900 text-white hover:bg-emerald-600'}`}
-              >
-                {inquirySent ? <><CheckCircle size={14} /> Request Logged</> : <><Mail size={14} /> Request Full Dossier</>}
-              </button>
-            </div>
-          </div>
+              <p className="text-zinc-500 max-w-sm font-light text-lg italic">Architecting environments for the world's most distinguished minds.</p>
+           </div>
+           <div>
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald-500 mb-10">Directory</h4>
+              <ul className="space-y-6 text-zinc-400 text-sm font-light">
+                 <li onClick={() => handleNav('gallery')} className="hover:text-emerald-500 cursor-pointer transition-colors">Portfolio</li>
+                 <li onClick={() => handleNav('planner')} className="hover:text-emerald-500 cursor-pointer transition-colors">Economics</li>
+                 <li onClick={() => handleNav('team')} className="hover:text-emerald-500 cursor-pointer transition-colors">The Group</li>
+                 <li onClick={() => handleNav('contact')} className="hover:text-emerald-500 cursor-pointer transition-colors">Connect</li>
+              </ul>
+           </div>
+           <div>
+              <h4 className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald-500 mb-10">Presence</h4>
+              <div className="flex gap-4">
+                 <a href="#" className="w-12 h-12 border border-white/5 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-all"><Linkedin size={18}/></a>
+                 <a href="#" className="w-12 h-12 border border-white/5 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-all"><Globe size={18}/></a>
+              </div>
+           </div>
         </div>
-      )}
-
-      <footer className="bg-zinc-950 text-white pt-24 pb-12 px-6">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-            <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <VelmorLogo className="w-8 h-8" light />
-                <span className="text-xl font-serif italic tracking-widest">VELMOR</span>
-              </div>
-              <p className="text-white/30 text-sm italic max-w-xs leading-relaxed font-light">
-                Curating high value assets for the modern era. <br/>
-                Defining the North Carolina architectural skyline since 2020.
-              </p>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/20 font-bold mb-6">Explore</p>
-              <div className="flex flex-col gap-3 text-sm text-white/50">
-                <button onClick={() => setPage('gallery')} className="text-left hover:text-white transition-colors">Portfolio</button>
-                <button onClick={() => setPage('planner')} className="text-left hover:text-white transition-colors">Asset Guardian</button>
-                <button onClick={() => setPage('contact')} className="text-left hover:text-white transition-colors">Contact</button>
-                <button className="text-left hover:text-white transition-colors">Wishlist ({wishlist.length})</button>
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/20 font-bold mb-6">Network</p>
-              <div className="flex flex-col gap-3 text-sm text-white/50">
-                <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-                <a href="#" className="hover:text-white transition-colors">Instagram</a>
-                <a href="#" className="hover:text-white transition-colors">Private Portal</a>
-              </div>
-            </div>
-          </div>
-          
-          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-[9px] text-white/20 font-bold uppercase tracking-widest">© 2026 VELMOR PROPERTY GROUP NC</p>
-            <div className="flex gap-8 text-[9px] font-bold uppercase tracking-widest text-white/20">
-               <button onClick={() => setPage('terms')} className="hover:text-white transition-all underline underline-offset-4 decoration-white/0 hover:decoration-white/20">Terms of Service</button>
-               <button onClick={() => setPage('privacy')} className="hover:text-white transition-all underline underline-offset-4 decoration-white/0 hover:decoration-white/20">Privacy & Cookies</button>
-            </div>
-          </div>
+        <div className="max-w-[1400px] mx-auto mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+           <p className="text-[9px] uppercase tracking-[0.6em] text-zinc-600 font-bold">© 2026 VELMOR PREMIER GROUP · PRIVATE EQUITY</p>
+           <div className="flex gap-10 text-zinc-700 text-[9px] uppercase tracking-widest font-bold">
+             <span className="hover:text-white cursor-pointer transition-colors">Privacy</span>
+             <span className="hover:text-white cursor-pointer transition-colors">Terms</span>
+           </div>
         </div>
       </footer>
 
@@ -555,27 +477,24 @@ export default function App() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        @keyframes bounce-subtle {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-bounce-subtle {
-          animation: bounce-subtle 4s ease-in-out infinite;
-        }
+        @keyframes zoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .animate-zoom { animation: zoom 25s ease-in-out infinite alternate; }
 
-        /* Custom range input styling */
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slide-in-from-bottom { from { transform: translateY(2rem); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes zoom-in { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .animate-in { animation-fill-mode: both; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+        .fade-in { animation-name: fade-in; animation-duration: 1.2s; }
+        .zoom-in { animation-name: zoom-in; animation-duration: 0.8s; }
+        .slide-in-from-bottom-8 { animation-name: slide-in-from-bottom; animation-duration: 1.2s; }
+        
         input[type=range]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          height: 18px;
-          width: 18px;
-          border-radius: 50%;
-          background: #10b981;
-          cursor: pointer;
-          margin-top: -8px;
-          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+          -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%;
+          background: #059669; cursor: pointer; border: none;
+          box-shadow: 0 0 15px rgba(5, 150, 105, 0.4);
         }
       `}</style>
-
     </div>
   );
 }
