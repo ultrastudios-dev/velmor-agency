@@ -9,9 +9,9 @@
 ### 🚀 Key Features
 - **Cinematic Performance:** Optimized with React & Vite for lightning fast load times.
 - **Modern Tech Stack:** Built using Tailwind CSS for high-end styling.
-- **Architecture:** Luxury-grade code structure, ready for production deployment.
+- **Architecture:** Luxury grade code structure, ready for production deployment.
 
-### 🏛️ About Ultra Studios
+### About Ultra Studios
 **Ultra Studios** is a creative laboratory specialized in pushing the boundaries of web development and digital branding. We don't just build websites. we engineer digital environments that leave a lasting impression.
 
 ---
@@ -31,4 +31,4 @@ We accept direct contributions via the Solana network. This helps us keep the li
 Interested in a high end web project or custom development? Lets talk.
 
 - **Telegram:** [@zayyexe](https://t.me/zayyexe)
-- **Status:** 🟢 Open for freelance projects.
+- **Status:** Open for freelance projects.
