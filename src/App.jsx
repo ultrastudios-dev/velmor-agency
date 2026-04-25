@@ -243,7 +243,7 @@ export default function App() {
                 <div className="space-y-10">
                   <h2 className="text-4xl md:text-6xl font-serif italic leading-tight">Invisible details of prestige.</h2>
                   <p className="text-zinc-500 text-lg leading-relaxed font-light">
-                    Velmor Premier is a strategic luxury consultancy. We shift the focus from square footage to "Life Value." Our philosophy centers on emotional architecture and invisible technology.
+                    Velmor Premier is a strategic luxury consultancy. We shift the focus from square footage to Life Value Our philosophy centers on emotional architecture and invisible technology.
                   </p>
                   <div className="grid grid-cols-2 gap-10 pt-6">
                     <div>
