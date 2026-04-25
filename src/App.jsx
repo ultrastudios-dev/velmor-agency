@@ -73,19 +73,19 @@ const TEAM_DATA = [
     name: "Alexander Velmor",
     role: "Visionary CEO & Founder",
     img: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=400",
-    bio: The architect of Velmor's prestige. Alexander doesn't just sell property he engineers legacy environments for the worlds elite.
+    bio: "The architect of Velmor's prestige. Alexander doesn't just sell property he engineers legacy environments for the worlds elite"
   },
   {
     name: "Elena Sterling",
     role: "Director of Private Estates",
     img: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=400",
-    bio: Elena curates the most exclusive residential list in the US. Her eye for detail ensures that every home is a functional work of art.
+    bio: "Elena curates the most exclusive residential list in the US. Her eye for detail ensures that every home is a functional work of art"
   },
   {
     name: "Marcus Thorne",
     role: "Commercial Strategist",
     img: "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400",
-    bio: Marcus bridges the gap between commercial viability and aesthetic excellence, securing high yield assets for institutional investors.
+    bio: "Marcus bridges the gap between commercial viability and aesthetic excellence, securing high yield assets for institutional investors"
   }
 ];
 
