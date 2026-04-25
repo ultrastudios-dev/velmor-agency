@@ -229,7 +229,7 @@ export default function App() {
               <img src="https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=1600" className="absolute inset-0 w-full h-full object-cover scale-105 animate-zoom" alt="Hero" />
               <div className="absolute inset-0 bg-zinc-950/40" />
               <div className="relative z-10 text-center px-6 max-w-4xl">
-                <p className="text-emerald-400 font-bold tracking-[0.5em] text-[10px] uppercase mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">High-End Real Estate Vanguard</p>
+                <p className="text-emerald-400 font-bold tracking-[0.5em] text-[10px] uppercase mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">High End Real Estate Vanguard</p>
                 <h1 className="text-5xl md:text-8xl font-serif italic text-white mb-10 leading-[1.1] animate-in fade-in slide-in-from-bottom-10 duration-1000">Beyond Living. <br/><span className="font-sans not-italic font-light opacity-80">Architecting Legacies.</span></h1>
                 <div className="flex flex-col md:flex-row gap-5 justify-center animate-in fade-in slide-in-from-bottom-12 duration-1000">
                   <button onClick={() => setPage('gallery')} className="px-12 py-5 bg-white text-zinc-950 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all">Explore Collection</button>
@@ -388,7 +388,7 @@ export default function App() {
                     <div className="w-12 h-12 rounded-full bg-zinc-50 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all">
                       <Phone size={20} />
                     </div>
-                    <span className="text-lg font-serif italic">+1 (800) VELMOR</span>
+                    <span className="text-lg font-serif italic">+1 800 243 546</span>
                   </div>
                 </div>
               </div>
