@@ -8,7 +8,7 @@
 
 ### 🚀 Key Features
 - **Cinematic Performance:** Optimized with React & Vite for lightning fast load times.
-- **Modern Tech Stack:** Built using Tailwind CSS for high-end styling.
+- **Modern Tech Stack:** Built using Tailwind CSS for high end styling.
 - **Architecture:** Luxury grade code structure, ready for production deployment.
 
 ### About Ultra Studios
