@@ -1,6 +1,6 @@
 # ⚡ Velmor Agency Framework
 
-**Velmor** is a high performance, aesthetically driven landing page framework built for modern digital agencies. Developed by **Ultra Studios**, it focuses on delivering a cinematic user experience without compromising on speed and technical SEO.
+**Velmor** is a high performance, aesthetically driven landing page framework built for modern digital agencies. Developed by **Ultra Studios**. it focuses on delivering a cinematic user experience without compromising on speed and technical SEO.
 
 > "Converting complex code into premium visual experiences."
 
